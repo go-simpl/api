@@ -1,0 +1,6 @@
+test:
+	go test -v ./...
+
+test-coverage:
+	go test -coverpkg ./... -cover -coverprofile=coverage.out -v ./...
+	go tool cover -html=coverage.out
