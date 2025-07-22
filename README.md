@@ -1,4 +1,4 @@
-# Kha - Simple yet powerful API framework for GO (with swagger spec generation)
+# go-simpl/api - Simple yet powerful API framework for GO (with swagger spec generation)
 ![Coverage](https://img.shields.io/badge/Coverage-91.6%25-brightgreen)
 
 A simplapie, developer-friendly API framework for Go, featuring automatic Swagger (OpenAPI) spec generation.
