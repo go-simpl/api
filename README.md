@@ -1,7 +1,7 @@
 # go-simpl/api - Simple yet powerful API framework for GO (with swagger spec generation)
 ![Coverage](https://img.shields.io/badge/Coverage-87.5%25-brightgreen)
 
-A simplapie, developer-friendly API framework for Go, featuring automatic Swagger (OpenAPI) spec generation.
+A simple, developer-friendly API framework for Go, featuring automatic Swagger (OpenAPI) spec generation.
 
 ## 🚀 Features
 
