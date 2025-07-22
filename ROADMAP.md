@@ -2,11 +2,14 @@
 
 ## Features
 
+- [ ] Configurable Swagger Spec
+- [ ] Swagger descriptions
 - [ ] Response Headers
 - [ ] Non-json responses
 - [ ] Middleware
 - [ ] Response Cookies
 - [ ] Streaming responses
+- [ ] Native handler
 
 ## Framework support
 

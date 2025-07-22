@@ -10,7 +10,7 @@ import (
 	"github.com/go-simpl/simplapi/pkg/framework"
 )
 
-func PopulateValueFromTypeUsingContext(f framework.FrameworkRequest, pType reflect.Type, pVal reflect.Value) error {
+func ComputeValuesFromRequest(f framework.FrameworkRequest, pType reflect.Type, pVal reflect.Value) error {
 	for i := 0; i < pVal.NumField(); i++ {
 		if pType.Field(i).Tag.Get("body") == "json" {
 			b := pVal.Field(i).Addr().Interface()
@@ -52,7 +52,7 @@ func PopulateValueFromTypeUsingContext(f framework.FrameworkRequest, pType refle
 			}
 
 		} else if pType.Field(i).Type.Kind() == reflect.Struct {
-			err := PopulateValueFromTypeUsingContext(f, pType.Field(i).Type, pVal.Field(i))
+			err := ComputeValuesFromRequest(f, pType.Field(i).Type, pVal.Field(i))
 			if err != nil {
 				return err
 			}

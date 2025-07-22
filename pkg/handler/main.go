@@ -7,8 +7,6 @@ import (
 	"github.com/go-simpl/simplapi/errors"
 	"github.com/go-simpl/simplapi/pkg/context"
 	"github.com/go-simpl/simplapi/pkg/framework"
-	"github.com/go-simpl/simplapi/pkg/reflection"
-	"github.com/go-simpl/simplapi/types"
 )
 
 func WrapHandler(handler interface{}, next framework.FrameworkHandler) framework.FrameworkHandler {
@@ -30,26 +28,13 @@ func WrapHandler(handler interface{}, next framework.FrameworkHandler) framework
 		panic("handler must return an error at the last position")
 	}
 
-	createParams := func(req framework.FrameworkRequest, ctx *context.Context) ([]reflect.Value, error) {
-		numInputs := handlerType.NumIn()
-		inputs := make([]reflect.Value, numInputs)
-		for i := 0; i < numInputs; i++ {
-			if handlerType.In(i) == reflect.TypeOf(ctx) {
-				inputs[i] = reflect.ValueOf(ctx)
-				continue
-			}
-
-			inputs[i] = reflect.New(handlerType.In(i)).Elem()
-			err := reflection.PopulateValueFromTypeUsingContext(req, handlerType.In(i), inputs[i])
-			if err != nil {
-				return nil, err
-			}
-		}
-		return inputs, nil
+	handlerInputTypes := make([]reflect.Type, handlerType.NumIn())
+	for i := 0; i < handlerType.NumIn(); i++ {
+		handlerInputTypes[i] = handlerType.In(i)
 	}
 
 	return func(req framework.FrameworkRequest, res framework.FrameworkResponse, ctx *context.Context) error {
-		inputs, err := createParams(req, ctx)
+		inputs, err := constructParams(req, ctx, handlerInputTypes)
 		if err != nil {
 			if typeErr, ok := err.(errors.TypeError); ok {
 				res.SetStatusCode(http.StatusUnprocessableEntity)
@@ -68,19 +53,15 @@ func WrapHandler(handler interface{}, next framework.FrameworkHandler) framework
 		// handle response
 		for _, result := range results {
 			if !result.IsNil() {
-				// check for custom response types
-				if response, ok := result.Interface().(*types.HTMLResponse); ok {
-					res.SetStatusCode(http.StatusOK)
-					res.SetHeader("Content-Type", "text/html")
-					return res.SendString(response.HTML)
+				bodyDone, err := transferToResponse(res, result)
+				if err != nil {
+					return err
 				}
 
-				if response, ok := result.Interface().(types.APIResponse); ok {
-					res.SetStatusCode(response.GetStatusCode())
-					return res.SendJSON(result.Interface())
-				} else {
-					return res.SendJSON(result.Interface())
+				if bodyDone {
+					return nil
 				}
+
 			}
 		}
 
