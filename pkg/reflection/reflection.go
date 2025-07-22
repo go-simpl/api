@@ -78,6 +78,13 @@ func PopulateValueFromTypeUsingContext(f framework.FrameworkRequest, pType refle
 					return err
 				}
 			}
+		} else if pType.Field(i).Tag.Get("cookie") != "" {
+			if pVal.Field(i).Type().Kind() != reflect.Ptr || f.GetCookieValue(pType.Field(i).Tag.Get("cookie")) != "" {
+				err := setValue(pVal.Field(i), f.GetCookieValue(pType.Field(i).Tag.Get("cookie")), pType.Field(i).Name)
+				if err != nil {
+					return err
+				}
+			}
 		}
 	}
 

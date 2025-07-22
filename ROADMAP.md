@@ -6,7 +6,6 @@
 - [ ] Response Headers
 - [ ] Non-json responses
 - [ ] Middleware
-- [ ] Cookie as param injection
 - [ ] Response Cookies
 - [ ] Streaming responses
 

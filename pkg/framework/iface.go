@@ -27,6 +27,7 @@ type FrameworkRequest interface {
 	GetPathParam(key string) string
 	GetQueryParam(key string) string
 	GetFormValue(key string) string
+	GetCookieValue(key string) string
 	GetFile(key string) (*multipart.FileHeader, error)
 }
 

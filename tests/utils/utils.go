@@ -11,3 +11,13 @@ func GetAllFrameworks() []string {
 		"gin",
 	}
 }
+
+func GetSupportedTypes() []string {
+	return []string{
+		"string",
+		"int",
+		"uint",
+		"float64",
+		"bool",
+	}
+}

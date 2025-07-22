@@ -37,6 +37,14 @@ func (r *ginRequest) GetFormValue(key string) string {
 	return r.c.PostForm(key)
 }
 
+func (r *ginRequest) GetCookieValue(key string) string {
+	cookie, err := r.c.Cookie(key)
+	if err != nil {
+		return ""
+	}
+	return cookie
+}
+
 func (r *ginRequest) GetFile(key string) (*multipart.FileHeader, error) {
 	return r.c.FormFile(key)
 }

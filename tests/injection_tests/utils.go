@@ -1,9 +1,12 @@
 package injectiontests
 
 import (
+	"io"
 	"net/http"
+	"testing"
 
 	"github.com/go-simpl/simplapi"
+	"github.com/stretchr/testify/assert"
 )
 
 type RouteRegistrationFunc func(path string, tags []string, handlers ...interface{})
@@ -36,4 +39,21 @@ func shouldSkipOptionalPathParamTest(frameworkName string) bool {
 		return true
 	}
 	return false
+}
+
+func doTest[T any](t *testing.T, app *simplapi.App, req *http.Request, routeRegistration RouteRegistrationFunc, pathPattern string) (T, int, string) {
+	var result T
+
+	routeRegistration(pathPattern, nil, func(input T) (*HelloResponse, error) {
+		result = input
+		return &HelloResponse{Message: "Hello"}, nil
+	})
+
+	resp, err := app.GetApp().TestRequest(req)
+	assert.NoError(t, err)
+
+	bodyBytes, err := io.ReadAll(resp.Body)
+	assert.NoError(t, err)
+
+	return result, resp.StatusCode, string(bodyBytes)
 }

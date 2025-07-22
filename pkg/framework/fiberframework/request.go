@@ -37,6 +37,10 @@ func (r *fiberRequest) GetFormValue(key string) string {
 	return r.c.FormValue(key)
 }
 
+func (r *fiberRequest) GetCookieValue(key string) string {
+	return r.c.Cookies(key)
+}
+
 func (r *fiberRequest) GetFile(key string) (*multipart.FileHeader, error) {
 	return r.c.FormFile(key)
 }
