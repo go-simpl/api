@@ -11,12 +11,12 @@ import (
 	"github.com/go-simpl/simplapi"
 
 	_ "github.com/go-simpl/simplapi/pkg/framework/fiberframework"
+	_ "github.com/go-simpl/simplapi/pkg/framework/ginframework"
+	"github.com/go-simpl/simplapi/tests/utils"
 )
 
 func TestQueryParam(t *testing.T) {
-	frameworks := []string{
-		"fiber",
-	}
+	frameworks := utils.GetAllFrameworks()
 	methods := []string{
 		http.MethodGet,
 		http.MethodPost,
@@ -32,11 +32,11 @@ func TestQueryParam(t *testing.T) {
 		t.Run(framework, func(t *testing.T) {
 			for _, method := range methods {
 				t.Run(method, func(t *testing.T) {
-					t.Run("string", func(t *testing.T) { testQueryParamOfTypeString(t, method) })
-					t.Run("int", func(t *testing.T) { testQueryParamOfTypeInt(t, method) })
-					t.Run("uint", func(t *testing.T) { testQueryParamOfTypeUint(t, method) })
-					t.Run("float", func(t *testing.T) { testQueryParamOfTypeFloat(t, method) })
-					t.Run("bool", func(t *testing.T) { testQueryParamOfTypeBool(t, method) })
+					t.Run("string", func(t *testing.T) { testQueryParamOfTypeString(t, framework, method) })
+					t.Run("int", func(t *testing.T) { testQueryParamOfTypeInt(t, framework, method) })
+					t.Run("uint", func(t *testing.T) { testQueryParamOfTypeUint(t, framework, method) })
+					t.Run("float", func(t *testing.T) { testQueryParamOfTypeFloat(t, framework, method) })
+					t.Run("bool", func(t *testing.T) { testQueryParamOfTypeBool(t, framework, method) })
 				})
 			}
 		})
@@ -60,7 +60,7 @@ func doTest[T any](t *testing.T, app *simplapi.App, req *http.Request, routeRegi
 	return result, resp.StatusCode, string(bodyBytes)
 }
 
-func testQueryParamOfTypeString(t *testing.T, method string) {
+func testQueryParamOfTypeString(t *testing.T, frameworkName string, method string) {
 	t.Run("required", func(t *testing.T) {
 		t.Run("direct_struct", func(t *testing.T) {
 			t.Run("with_value", func(t *testing.T) {
@@ -68,7 +68,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 					Name string `query:"name"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?name=John", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, "John", res.Name)
@@ -79,7 +79,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 					Name string `query:"name"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, "", res.Name)
@@ -90,7 +90,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 					Name string `query:"name"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/name=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, "", res.Name)
@@ -105,7 +105,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?name=John", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, "John", res.Inner.Name)
@@ -117,7 +117,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 						Name string `query:"name"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, "", res.Inner.Name)
@@ -129,7 +129,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 						Name string `query:"name"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/name=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, "", res.Inner.Name)
@@ -144,7 +144,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 					Name *string `query:"name"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?name=John", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Name)
@@ -156,7 +156,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 					Name *string `query:"name"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Name)
@@ -167,7 +167,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 					Name *string `query:"name"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/name=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Name)
@@ -182,7 +182,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?name=John", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Inner.Name)
@@ -195,7 +195,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 						Name *string `query:"name"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Name)
@@ -207,7 +207,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 						Name *string `query:"name"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/name=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Name)
@@ -217,7 +217,7 @@ func testQueryParamOfTypeString(t *testing.T, method string) {
 	})
 }
 
-func testQueryParamOfTypeInt(t *testing.T, method string) {
+func testQueryParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 	t.Run("required", func(t *testing.T) {
 		t.Run("direct_struct", func(t *testing.T) {
 			t.Run("with_value", func(t *testing.T) {
@@ -225,7 +225,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					Age int `query:"age"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=25", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 25, res.Age)
@@ -236,7 +236,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					Age int `query:"age"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0, res.Age)
@@ -247,7 +247,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					Age int `query:"age"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0, res.Age)
@@ -258,7 +258,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					Age int `query:"age"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0, res.Age)
@@ -273,7 +273,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=25", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 25, res.Inner.Age)
@@ -285,7 +285,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 						Age int `query:"age"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0, res.Inner.Age)
@@ -297,7 +297,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 						Age int `query:"age"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0, res.Inner.Age)
@@ -309,7 +309,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 						Age int `query:"age"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0, res.Inner.Age)
@@ -324,7 +324,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					Age *int `query:"age"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=25", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Age)
@@ -336,7 +336,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					Age *int `query:"age"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Age)
@@ -347,7 +347,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					Age *int `query:"age"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Age)
@@ -358,7 +358,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					Age *int `query:"age"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Age)
@@ -373,7 +373,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=25", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Inner.Age)
@@ -386,7 +386,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 						Age *int `query:"age"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Age)
@@ -398,7 +398,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 						Age *int `query:"age"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Age)
@@ -410,7 +410,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 						Age *int `query:"age"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?age=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Age)
@@ -420,7 +420,7 @@ func testQueryParamOfTypeInt(t *testing.T, method string) {
 	})
 }
 
-func testQueryParamOfTypeUint(t *testing.T, method string) {
+func testQueryParamOfTypeUint(t *testing.T, frameworkName string, method string) {
 	t.Run("required", func(t *testing.T) {
 		t.Run("direct_struct", func(t *testing.T) {
 			t.Run("with_value", func(t *testing.T) {
@@ -428,7 +428,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					Count uint `query:"count"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=10", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, uint(10), res.Count)
@@ -439,7 +439,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					Count uint `query:"count"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, uint(0), res.Count)
@@ -450,7 +450,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					Count uint `query:"count"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, uint(0), res.Count)
@@ -461,7 +461,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					Count uint `query:"count"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, uint(0), res.Count)
@@ -472,7 +472,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					Count uint `query:"count"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=-5", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, uint(0), res.Count)
@@ -487,7 +487,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=10", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, uint(10), res.Inner.Count)
@@ -499,7 +499,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 						Count uint `query:"count"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, uint(0), res.Inner.Count)
@@ -511,7 +511,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 						Count uint `query:"count"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, uint(0), res.Inner.Count)
@@ -523,7 +523,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 						Count uint `query:"count"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, uint(0), res.Inner.Count)
@@ -538,7 +538,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					Count *uint `query:"count"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=10", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Count)
@@ -550,7 +550,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					Count *uint `query:"count"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Count)
@@ -561,7 +561,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					Count *uint `query:"count"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Count)
@@ -572,7 +572,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					Count *uint `query:"count"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Count)
@@ -587,7 +587,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=10", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Inner.Count)
@@ -600,7 +600,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 						Count *uint `query:"count"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Count)
@@ -612,7 +612,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 						Count *uint `query:"count"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Count)
@@ -624,7 +624,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 						Count *uint `query:"count"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?count=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Count)
@@ -634,7 +634,7 @@ func testQueryParamOfTypeUint(t *testing.T, method string) {
 	})
 }
 
-func testQueryParamOfTypeFloat(t *testing.T, method string) {
+func testQueryParamOfTypeFloat(t *testing.T, frameworkName string, method string) {
 	t.Run("required", func(t *testing.T) {
 		t.Run("direct_struct", func(t *testing.T) {
 			t.Run("with_value", func(t *testing.T) {
@@ -642,7 +642,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					Price float64 `query:"price"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=19.99", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 19.99, res.Price)
@@ -653,7 +653,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					Price float64 `query:"price"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0.0, res.Price)
@@ -664,7 +664,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					Price float64 `query:"price"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0.0, res.Price)
@@ -675,7 +675,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					Price float64 `query:"price"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0.0, res.Price)
@@ -690,7 +690,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=19.99", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 19.99, res.Inner.Price)
@@ -702,7 +702,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 						Price float64 `query:"price"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0.0, res.Inner.Price)
@@ -714,7 +714,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 						Price float64 `query:"price"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0.0, res.Inner.Price)
@@ -726,7 +726,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 						Price float64 `query:"price"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, 0.0, res.Inner.Price)
@@ -741,7 +741,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					Price *float64 `query:"price"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=19.99", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Price)
@@ -753,7 +753,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					Price *float64 `query:"price"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Price)
@@ -764,7 +764,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					Price *float64 `query:"price"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Price)
@@ -775,7 +775,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					Price *float64 `query:"price"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Price)
@@ -790,7 +790,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=19.99", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Inner.Price)
@@ -803,7 +803,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 						Price *float64 `query:"price"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Price)
@@ -815,7 +815,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 						Price *float64 `query:"price"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Price)
@@ -827,7 +827,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 						Price *float64 `query:"price"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?price=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Price)
@@ -837,7 +837,7 @@ func testQueryParamOfTypeFloat(t *testing.T, method string) {
 	})
 }
 
-func testQueryParamOfTypeBool(t *testing.T, method string) {
+func testQueryParamOfTypeBool(t *testing.T, frameworkName string, method string) {
 	t.Run("required", func(t *testing.T) {
 		t.Run("direct_struct", func(t *testing.T) {
 			t.Run("with_value_true", func(t *testing.T) {
@@ -845,7 +845,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=true", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, true, res.Active)
@@ -856,7 +856,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=false", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, false, res.Active)
@@ -867,7 +867,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=1", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, true, res.Active)
@@ -878,7 +878,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=0", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, false, res.Active)
@@ -889,7 +889,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, false, res.Active)
@@ -900,7 +900,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, false, res.Active)
@@ -911,7 +911,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, false, res.Active)
@@ -926,7 +926,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=true", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, true, res.Inner.Active)
@@ -938,7 +938,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 						Active bool `query:"active"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, false, res.Inner.Active)
@@ -950,7 +950,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 						Active bool `query:"active"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, false, res.Inner.Active)
@@ -962,7 +962,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 						Active bool `query:"active"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Equal(t, false, res.Inner.Active)
@@ -977,7 +977,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active *bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=true", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Active)
@@ -989,7 +989,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active *bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=false", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Active)
@@ -1001,7 +1001,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active *bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Active)
@@ -1012,7 +1012,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active *bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Active)
@@ -1023,7 +1023,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					Active *bool `query:"active"`
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Active)
@@ -1038,7 +1038,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=true", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.NotNil(t, res.Inner.Active)
@@ -1051,7 +1051,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 						Active *bool `query:"active"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Active)
@@ -1063,7 +1063,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 						Active *bool `query:"active"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Active)
@@ -1075,7 +1075,7 @@ func testQueryParamOfTypeBool(t *testing.T, method string) {
 						Active *bool `query:"active"`
 					}
 				}
-				app, routeRegistration := SetupTest(method)
+				app, routeRegistration := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/?active=invalid", nil)
 				res, status, _ := doTest[Input](t, app, req, routeRegistration)
 				assert.Nil(t, res.Inner.Active)

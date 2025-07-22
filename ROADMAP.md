@@ -12,7 +12,7 @@
 
 ## Framework support
 
-- [ ] Gin - https://github.com/gin-gonic/gin - 83k
+- [-] Gin - https://github.com/gin-gonic/gin - 83k
 - [-] Fiber - https://github.com/gofiber/fiber - 37k
 - [ ] Beego - https://github.com/beego/beego - 32k
 - [ ] Echo - https://github.com/labstack/echo - 31k

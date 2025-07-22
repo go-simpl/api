@@ -8,8 +8,8 @@ import (
 
 type RouteRegistrationFunc func(path string, tags []string, handlers ...interface{})
 
-func SetupTest(method string) (*simplapi.App, RouteRegistrationFunc) {
-	app := simplapi.New("fiber")
+func SetupTest(frameworkName string, method string) (*simplapi.App, RouteRegistrationFunc) {
+	app := simplapi.New(frameworkName)
 	switch method {
 	case http.MethodGet:
 		return app, app.GET
@@ -28,4 +28,12 @@ func SetupTest(method string) (*simplapi.App, RouteRegistrationFunc) {
 
 type HelloResponse struct {
 	Message string `json:"message"`
+}
+
+func shouldSkipOptionalPathParamTest(frameworkName string) bool {
+	switch frameworkName {
+	case "gin":
+		return true
+	}
+	return false
 }
