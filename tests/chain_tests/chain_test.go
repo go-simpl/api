@@ -4,11 +4,13 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"github.com/go-simpl/simplapi"
+	"github.com/go-simpl/simplapi/pkg/context"
 
 	_ "github.com/go-simpl/simplapi/pkg/framework/fiberframework"
 )
@@ -126,4 +128,33 @@ func TestChainReturnedErrorFromFirstFunc(t *testing.T) {
 	assert.NoError(t, err)
 	bodyString := string(bodyBytes)
 	assert.Equal(t, `server error`, bodyString)
+}
+
+func TestContextInChain(t *testing.T) {
+	app := simplapi.New()
+	fApp := app.GetApp()
+
+	func1 := func(ctx *context.Context) (*HelloResponse, error) {
+		ctx.Set("test", "test")
+		return nil, nil
+	}
+
+	func2 := func(ctx *context.Context) (*HelloResponse, error) {
+		assert.Equal(t, "test", ctx.Get("test"))
+		ctx.Delete("test")
+		return nil, nil
+	}
+
+	func3 := func(ctx *context.Context) (*HelloResponse, error) {
+		assert.False(t, ctx.Contains("test"))
+		return &HelloResponse{Message: ""}, nil
+	}
+
+	app.GET("/", nil, func1, func2, func3)
+
+	req := httptest.NewRequest("GET", "/", nil)
+	response, err := fApp.TestRequest(req)
+	assert.NoError(t, err)
+
+	assert.Equal(t, http.StatusOK, response.StatusCode)
 }

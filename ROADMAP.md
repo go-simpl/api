@@ -2,7 +2,6 @@
 
 ## Features
 
-- [ ] Shared context
 - [ ] Response Headers
 - [ ] Non-json responses
 - [ ] Middleware

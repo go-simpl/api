@@ -5,6 +5,7 @@ import (
 	"reflect"
 
 	"github.com/go-simpl/simplapi/errors"
+	"github.com/go-simpl/simplapi/pkg/context"
 	"github.com/go-simpl/simplapi/pkg/framework"
 	"github.com/go-simpl/simplapi/pkg/reflection"
 	"github.com/go-simpl/simplapi/types"
@@ -29,10 +30,15 @@ func WrapHandler(handler interface{}, next framework.FrameworkHandler) framework
 		panic("handler must return an error at the last position")
 	}
 
-	createParams := func(req framework.FrameworkRequest) ([]reflect.Value, error) {
+	createParams := func(req framework.FrameworkRequest, ctx *context.Context) ([]reflect.Value, error) {
 		numInputs := handlerType.NumIn()
 		inputs := make([]reflect.Value, numInputs)
 		for i := 0; i < numInputs; i++ {
+			if handlerType.In(i) == reflect.TypeOf(ctx) {
+				inputs[i] = reflect.ValueOf(ctx)
+				continue
+			}
+
 			inputs[i] = reflect.New(handlerType.In(i)).Elem()
 			err := reflection.PopulateValueFromTypeUsingContext(req, handlerType.In(i), inputs[i])
 			if err != nil {
@@ -42,8 +48,8 @@ func WrapHandler(handler interface{}, next framework.FrameworkHandler) framework
 		return inputs, nil
 	}
 
-	return func(req framework.FrameworkRequest, res framework.FrameworkResponse) error {
-		inputs, err := createParams(req)
+	return func(req framework.FrameworkRequest, res framework.FrameworkResponse, ctx *context.Context) error {
+		inputs, err := createParams(req, ctx)
 		if err != nil {
 			if typeErr, ok := err.(errors.TypeError); ok {
 				res.SetStatusCode(http.StatusUnprocessableEntity)
@@ -79,7 +85,7 @@ func WrapHandler(handler interface{}, next framework.FrameworkHandler) framework
 		}
 
 		if next != nil {
-			return next(req, res)
+			return next(req, res, ctx)
 		}
 
 		return nil

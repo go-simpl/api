@@ -3,6 +3,8 @@ package framework
 import (
 	"mime/multipart"
 	"net/http"
+
+	"github.com/go-simpl/simplapi/pkg/context"
 )
 
 type Framework interface {
@@ -19,7 +21,7 @@ type Framework interface {
 	TestRequest(req *http.Request) (*http.Response, error)
 }
 
-type FrameworkHandler func(req FrameworkRequest, res FrameworkResponse) error
+type FrameworkHandler func(req FrameworkRequest, res FrameworkResponse, ctx *context.Context) error
 
 type FrameworkRequest interface {
 	ParseJSONBody(target interface{}) error

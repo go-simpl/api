@@ -7,6 +7,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/go-simpl/simplapi/pkg/context"
 	"github.com/go-simpl/simplapi/types"
 )
 
@@ -28,6 +29,10 @@ func UpdateDefinitionUsingParamTypes(definition map[string]interface{}, paramTyp
 	HEADER_EXCLUSIONS := map[string]bool{"content-type": true, "content-length": true, "user-agent": true}
 
 	for _, paramType := range paramTypes {
+		if paramType == reflect.TypeOf((*context.Context)(nil)) {
+			continue
+		}
+
 		for i := 0; i < paramType.NumField(); i++ {
 			field := paramType.Field(i)
 			if field.Tag.Get("body") != "" {

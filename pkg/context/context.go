@@ -22,3 +22,7 @@ func (c *Context) Contains(key string) bool {
 	_, ok := c.data[key]
 	return ok
 }
+
+func (c *Context) Delete(key string) {
+	delete(c.data, key)
+}
