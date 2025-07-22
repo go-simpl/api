@@ -1,7 +1,10 @@
 package fiberframework
 
 import (
+	"net/http"
+
 	"github.com/go-simpl/simplapi/pkg/framework"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -21,6 +24,29 @@ func (r *fiberResponse) SetStatusCode(statusCode int) {
 
 func (r *fiberResponse) SetHeader(key string, value string) {
 	r.c.Response().Header.Set(key, value)
+}
+
+func (r *fiberResponse) SetCookie(cookie http.Cookie) {
+	sameSite := ""
+	switch cookie.SameSite {
+	case http.SameSiteLaxMode:
+		sameSite = "Lax"
+	case http.SameSiteStrictMode:
+		sameSite = "Strict"
+	case http.SameSiteNoneMode:
+		sameSite = "None"
+	}
+	r.c.Cookie(&fiber.Cookie{
+		Name:     cookie.Name,
+		Value:    cookie.Value,
+		Path:     cookie.Path,
+		Domain:   cookie.Domain,
+		MaxAge:   cookie.MaxAge,
+		Expires:  cookie.Expires,
+		Secure:   cookie.Secure,
+		HTTPOnly: cookie.HttpOnly,
+		SameSite: sameSite,
+	})
 }
 
 func (r *fiberResponse) SendJSON(data interface{}) error {

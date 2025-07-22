@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/go-simpl/simplapi"
+	simplapi "github.com/go-simpl/simplapi"
+
 	"github.com/stretchr/testify/assert"
 )
 

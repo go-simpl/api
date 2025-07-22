@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"github.com/gin-gonic/gin"
 	"github.com/go-simpl/simplapi/pkg/context"
 	"github.com/go-simpl/simplapi/pkg/framework"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ginFramework struct {

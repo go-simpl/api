@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/go-simpl/simplapi"
+	simplapi "github.com/go-simpl/simplapi"
 	"github.com/go-simpl/simplapi/pkg/context"
 
 	_ "github.com/go-simpl/simplapi/pkg/framework/fiberframework"

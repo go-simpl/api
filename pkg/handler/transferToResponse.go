@@ -8,7 +8,15 @@ import (
 	"github.com/go-simpl/simplapi/types"
 )
 
+func hasResponseTags(t reflect.Type) bool {
+	return false
+}
+
 func transferToResponse(res framework.FrameworkResponse, result reflect.Value) (bool, error) {
+	if hasResponseTags(result.Type()) {
+		return false, nil
+	}
+
 	// check for custom response types
 	if response, ok := result.Interface().(*types.HTMLResponse); ok {
 		res.SetStatusCode(http.StatusOK)

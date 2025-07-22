@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/go-simpl/simplapi"
+	simplapi "github.com/go-simpl/simplapi"
 	_ "github.com/go-simpl/simplapi/pkg/framework/fiberframework"
 )
 

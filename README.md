@@ -15,10 +15,14 @@ A simple, developer-friendly API framework for Go, featuring automatic Swagger (
 **Create a new app**
 
 ```go
-import "github.com/go-simpl/simplapi"
+import (
+    "github.com/go-simpl/simplapi"
+
+    _ "github.com/go-simpl/simplapi/pkg/framework/fiberframework"
+)
 
 func main() {
-    app := simplapi.New()
+    app := simplapi.New("fiber")
 
     // Add routes
 

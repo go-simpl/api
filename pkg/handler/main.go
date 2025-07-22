@@ -61,7 +61,6 @@ func WrapHandler(handler interface{}, next framework.FrameworkHandler) framework
 				if bodyDone {
 					return nil
 				}
-
 			}
 		}
 

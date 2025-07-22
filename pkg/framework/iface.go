@@ -35,6 +35,7 @@ type FrameworkRequest interface {
 
 type FrameworkResponse interface {
 	SetHeader(key string, value string)
+	SetCookie(cookie http.Cookie)
 	SetStatusCode(statusCode int)
 	SendJSON(data interface{}) error
 	SendString(data string) error

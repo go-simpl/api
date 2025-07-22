@@ -3,8 +3,9 @@ package ginframework
 import (
 	"mime/multipart"
 
-	"github.com/gin-gonic/gin"
 	"github.com/go-simpl/simplapi/pkg/framework"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ginRequest struct {

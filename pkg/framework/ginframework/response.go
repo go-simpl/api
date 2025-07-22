@@ -1,8 +1,11 @@
 package ginframework
 
 import (
-	"github.com/gin-gonic/gin"
+	"net/http"
+
 	"github.com/go-simpl/simplapi/pkg/framework"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ginResponse struct {
@@ -21,6 +24,11 @@ func (r *ginResponse) SetStatusCode(statusCode int) {
 
 func (r *ginResponse) SetHeader(key string, value string) {
 	r.c.Header(key, value)
+}
+
+func (r *ginResponse) SetCookie(cookie http.Cookie) {
+	r.c.SetSameSite(cookie.SameSite)
+	r.c.SetCookie(cookie.Name, cookie.Value, cookie.MaxAge, cookie.Path, cookie.Domain, cookie.Secure, cookie.HttpOnly)
 }
 
 func (r *ginResponse) SendJSON(data interface{}) error {

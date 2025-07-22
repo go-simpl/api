@@ -4,6 +4,7 @@ import (
 	"mime/multipart"
 
 	"github.com/go-simpl/simplapi/pkg/framework"
+
 	"github.com/gofiber/fiber/v2"
 )
 
