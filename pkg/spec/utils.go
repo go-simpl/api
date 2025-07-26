@@ -1,8 +1,10 @@
 package spec
 
 import (
+	"fmt"
 	"mime/multipart"
 	"reflect"
+	"sync"
 
 	"github.com/getkin/kin-openapi/openapi3"
 )
@@ -32,4 +34,14 @@ func getSchemaForType(t reflect.Type) *openapi3.Schema {
 	}
 
 	return openapi3.NewStringSchema()
+}
+
+var schemaNameCount int = 0
+var schemaNameMutex sync.Mutex
+
+func generateSchemaName() string {
+	schemaNameMutex.Lock()
+	defer schemaNameMutex.Unlock()
+	schemaNameCount++
+	return fmt.Sprintf("Schema%d", schemaNameCount)
 }

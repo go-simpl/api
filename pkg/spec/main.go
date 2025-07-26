@@ -60,11 +60,14 @@ func New() *Spec {
 				},
 			),
 			openapi3gen.CreateTypeNameGenerator(func(t reflect.Type) string {
+				var name string = ""
 				if t.Name() == "" {
-					return ""
+					name = generateSchemaName()
+				} else {
+					name = t.Name()
 				}
 
-				name := t.PkgPath() + "_" + t.Name()
+				name = t.PkgPath() + "_" + name
 
 				name = strings.ReplaceAll(name, "github.com/go-simpl/simplapi/example/", "")
 				name = strings.ReplaceAll(name, "/", "_")
