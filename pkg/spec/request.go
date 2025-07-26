@@ -112,6 +112,15 @@ func addRequestInfoForParamType(gen *openapi3gen.Generator, schemas openapi3.Sch
 						WithSchema(getSchemaForType(field.Type)),
 				},
 			)
+		} else if field.Tag.Get("path") != "" {
+			op.Parameters = append(
+				op.Parameters,
+				&openapi3.ParameterRef{
+					Value: openapi3.NewPathParameter(field.Tag.Get("path")).
+						WithRequired(field.Type.Kind() != reflect.Ptr).
+						WithSchema(getSchemaForType(field.Type)),
+				},
+			)
 		}
 	}
 }
