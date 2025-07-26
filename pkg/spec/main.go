@@ -79,12 +79,16 @@ func (s *Spec) ToJson() any {
 	return s.spec
 }
 
-func (s *Spec) Register(path string, method string, handlers ...interface{}) {
+func (s *Spec) Register(path string, method string, tags []string, handlers ...interface{}) {
 	if s.spec.Paths.Find(path) == nil {
 		s.spec.Paths.Set(path, &openapi3.PathItem{})
 	}
 
 	op := openapi3.NewOperation()
+
+	if tags != nil {
+		op.Tags = tags
+	}
 
 	for _, h := range handlers {
 		addRequestInfo(s.gen, s.spec.Components.Schemas, op, h)
