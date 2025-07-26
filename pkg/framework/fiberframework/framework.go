@@ -3,6 +3,7 @@ package fiberframework
 import (
 	"net/http"
 	"net/http/httptest"
+	"strings"
 
 	"github.com/go-simpl/simplapi/pkg/context"
 	"github.com/go-simpl/simplapi/pkg/framework"
@@ -23,6 +24,16 @@ func New(app *fiber.App) framework.Framework {
 
 func (f *fiberFramework) GetNativeApp() interface{} {
 	return f.app
+}
+
+func (f *fiberFramework) GetOpenAPICompatiblePathPattern(path string) string {
+	pathParts := strings.Split(path, "/")
+	for i, part := range pathParts {
+		if strings.HasPrefix(part, ":") {
+			pathParts[i] = "{" + part[1:] + "}"
+		}
+	}
+	return strings.Join(pathParts, "/")
 }
 
 func (f *fiberFramework) Register(path string, method string, handler framework.FrameworkHandler) {

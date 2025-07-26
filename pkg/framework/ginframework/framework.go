@@ -27,6 +27,10 @@ func (g *ginFramework) GetNativeApp() interface{} {
 	return g.engine
 }
 
+func (g *ginFramework) GetOpenAPICompatiblePathPattern(path string) string {
+	return path
+}
+
 func (g *ginFramework) Register(path string, method string, handler framework.FrameworkHandler) {
 	switch method {
 	case http.MethodGet:

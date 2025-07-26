@@ -14,6 +14,7 @@ type Framework interface {
 	Shutdown() error
 
 	GetNativeApp() interface{}
+	GetOpenAPICompatiblePathPattern(path string) string
 
 	TestRequest(req *http.Request) (*http.Response, error)
 }

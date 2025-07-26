@@ -65,7 +65,7 @@ func (s *App) Sync() {
 	for _, e := range s.endpoints {
 		s.framework.Register(e.path, e.method, s.createHandler(e.handlers...))
 		if e.addToSpec {
-			s.spec.Register(e.path, e.method, e.handlers...)
+			s.spec.Register(s.framework.GetOpenAPICompatiblePathPattern(e.path), e.method, e.handlers...)
 		}
 	}
 }
