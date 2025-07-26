@@ -21,6 +21,21 @@ func New(app *fiber.App) framework.Framework {
 	}
 }
 
+func (f *fiberFramework) Register(path string, method string, handler framework.FrameworkHandler) {
+	switch method {
+	case http.MethodGet:
+		f.GET(path, handler)
+	case http.MethodPost:
+		f.POST(path, handler)
+	case http.MethodPut:
+		f.PUT(path, handler)
+	case http.MethodPatch:
+		f.PATCH(path, handler)
+	case http.MethodDelete:
+		f.DELETE(path, handler)
+	}
+}
+
 func (f *fiberFramework) GET(path string, handler framework.FrameworkHandler) {
 	f.app.Get(path, func(c *fiber.Ctx) error {
 		return handler(NewRequest(c), NewResponse(c), context.New())
@@ -51,26 +66,12 @@ func (f *fiberFramework) DELETE(path string, handler framework.FrameworkHandler)
 	})
 }
 
-func (f *fiberFramework) OPTIONS(path string, handler framework.FrameworkHandler) {
-	f.app.Options(path, func(c *fiber.Ctx) error {
-		return handler(NewRequest(c), NewResponse(c), context.New())
-	})
-}
-
-func (f *fiberFramework) HEAD(path string, handler framework.FrameworkHandler) {
-	f.app.Head(path, func(c *fiber.Ctx) error {
-		return handler(NewRequest(c), NewResponse(c), context.New())
-	})
-}
-
-func (f *fiberFramework) TRACE(path string, handler framework.FrameworkHandler) {
-	f.app.Trace(path, func(c *fiber.Ctx) error {
-		return handler(NewRequest(c), NewResponse(c), context.New())
-	})
-}
-
 func (f *fiberFramework) ListenAndServe(addr string) error {
 	return f.app.Listen(addr)
+}
+
+func (f *fiberFramework) Shutdown() error {
+	return f.app.Shutdown()
 }
 
 func (f *fiberFramework) TestRequest(req *http.Request) (*http.Response, error) {

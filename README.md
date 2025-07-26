@@ -37,15 +37,13 @@ Swagger UI will be instantly available on `http://localhost:8000/try` and the sw
 To add routes, call the appropriate methods on the app.
 
 ```go
-app.GET(path, tags, handlers...)
-app.POST(path, tags, handlers...)
-app.PUT(path, tags, handlers...)
+app.GET(path, handlers...)
+app.POST(path, handlers...)
+app.PUT(path, handlers...)
 // and so on
 ```
 
 path: `string` - path to handle
-
-tags: `[]string` - swagger tags
 
 handlers: `[]interface{}` - functions that handle the request
 
@@ -125,6 +123,6 @@ type InputType struct {
 type InputType struct {
     Form struct {
         UploadedFile *multipart.FileHeader `form:"file"`
-    }
+    } `body:"multipart"`
 }
 ```

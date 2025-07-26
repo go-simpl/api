@@ -65,9 +65,9 @@ func testPathParamOfTypeString(t *testing.T, frameworkName string, method string
 					Name string `path:"name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/hello/John", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/hello/:name")
+				res, status, _ := doTest[Input](t, app, req,  "/hello/:name")
 				assert.Equal(t, "John", res.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -76,9 +76,9 @@ func testPathParamOfTypeString(t *testing.T, frameworkName string, method string
 					Name string `path:"name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/hello/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/hello/:name")
+				res, status, _ := doTest[Input](t, app, req,  "/hello/:name")
 				assert.Equal(t, "", res.Name)
 				assert.Equal(t, http.StatusNotFound, status)
 			})
@@ -91,9 +91,9 @@ func testPathParamOfTypeString(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/hello/John", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/hello/:name")
+				res, status, _ := doTest[Input](t, app, req,  "/hello/:name")
 				assert.Equal(t, "John", res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -103,9 +103,9 @@ func testPathParamOfTypeString(t *testing.T, frameworkName string, method string
 						Name string `path:"name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/hello/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/hello/:name")
+				res, status, _ := doTest[Input](t, app, req,  "/hello/:name")
 				assert.Equal(t, "", res.Inner.Name)
 				assert.Equal(t, http.StatusNotFound, status)
 			})
@@ -122,9 +122,9 @@ func testPathParamOfTypeString(t *testing.T, frameworkName string, method string
 					Name *string `path:"name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/hello/John", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/hello/:name?")
+				res, status, _ := doTest[Input](t, app, req,  "/hello/:name?")
 				assert.NotNil(t, res.Name)
 				assert.Equal(t, "John", *res.Name)
 				assert.Equal(t, http.StatusOK, status)
@@ -134,9 +134,9 @@ func testPathParamOfTypeString(t *testing.T, frameworkName string, method string
 					Name *string `path:"name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/hello/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/hello/:name?")
+				res, status, _ := doTest[Input](t, app, req,  "/hello/:name?")
 				assert.Nil(t, res.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -149,9 +149,9 @@ func testPathParamOfTypeString(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/hello/John", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/hello/:name?")
+				res, status, _ := doTest[Input](t, app, req,  "/hello/:name?")
 				assert.NotNil(t, res.Inner.Name)
 				assert.Equal(t, "John", *res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
@@ -162,9 +162,9 @@ func testPathParamOfTypeString(t *testing.T, frameworkName string, method string
 						Name *string `path:"name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/hello/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/hello/:name?")
+				res, status, _ := doTest[Input](t, app, req,  "/hello/:name?")
 				assert.Nil(t, res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -180,9 +180,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 					Age int `path:"age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/25", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age")
 				assert.Equal(t, 25, res.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -191,9 +191,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 					Age int `path:"age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age")
 				assert.Equal(t, 0, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -206,9 +206,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/25", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age")
 				assert.Equal(t, 25, res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -218,9 +218,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 						Age int `path:"age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age")
 				assert.Equal(t, 0, res.Inner.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -237,9 +237,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 					Age *int `path:"age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/25", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age?")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age?")
 				assert.NotNil(t, res.Age)
 				assert.Equal(t, 25, *res.Age)
 				assert.Equal(t, http.StatusOK, status)
@@ -249,9 +249,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 					Age *int `path:"age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age?")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age?")
 				assert.Nil(t, res.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -260,9 +260,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 					Age *int `path:"age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age?")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age?")
 				assert.Nil(t, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -275,9 +275,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/25", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age?")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age?")
 				assert.NotNil(t, res.Inner.Age)
 				assert.Equal(t, 25, *res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
@@ -288,9 +288,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 						Age *int `path:"age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age?")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age?")
 				assert.Nil(t, res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -300,9 +300,9 @@ func testPathParamOfTypeInt(t *testing.T, frameworkName string, method string) {
 						Age *int `path:"age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/user/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/user/:age?")
+				res, status, _ := doTest[Input](t, app, req,  "/user/:age?")
 				assert.Nil(t, res.Inner.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -318,9 +318,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 					Count uint `path:"count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/10", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count")
 				assert.Equal(t, uint(10), res.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -329,9 +329,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 					Count uint `path:"count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -340,9 +340,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 					Count uint `path:"count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/-5", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -355,9 +355,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/10", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count")
 				assert.Equal(t, uint(10), res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -367,9 +367,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 						Count uint `path:"count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count")
 				assert.Equal(t, uint(0), res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -386,9 +386,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 					Count *uint `path:"count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/10", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count?")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count?")
 				assert.NotNil(t, res.Count)
 				assert.Equal(t, uint(10), *res.Count)
 				assert.Equal(t, http.StatusOK, status)
@@ -398,9 +398,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 					Count *uint `path:"count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count?")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count?")
 				assert.Nil(t, res.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -409,9 +409,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 					Count *uint `path:"count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count?")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count?")
 				assert.Nil(t, res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -424,9 +424,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/10", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count?")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count?")
 				assert.NotNil(t, res.Inner.Count)
 				assert.Equal(t, uint(10), *res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
@@ -437,9 +437,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 						Count *uint `path:"count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count?")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count?")
 				assert.Nil(t, res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -449,9 +449,9 @@ func testPathParamOfTypeUint(t *testing.T, frameworkName string, method string) 
 						Count *uint `path:"count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/item/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/item/:count?")
+				res, status, _ := doTest[Input](t, app, req,  "/item/:count?")
 				assert.Nil(t, res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -467,9 +467,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 					Price float64 `path:"price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/19.99", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price")
 				assert.Equal(t, 19.99, res.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -478,9 +478,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 					Price float64 `path:"price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price")
 				assert.Equal(t, 0.0, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -493,9 +493,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/19.99", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price")
 				assert.Equal(t, 19.99, res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -505,9 +505,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 						Price float64 `path:"price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price")
 				assert.Equal(t, 0.0, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -524,9 +524,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 					Price *float64 `path:"price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/19.99", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price?")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price?")
 				assert.NotNil(t, res.Price)
 				assert.Equal(t, 19.99, *res.Price)
 				assert.Equal(t, http.StatusOK, status)
@@ -536,9 +536,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 					Price *float64 `path:"price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price?")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price?")
 				assert.Nil(t, res.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -547,9 +547,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 					Price *float64 `path:"price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price?")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price?")
 				assert.Nil(t, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -562,9 +562,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/19.99", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price?")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price?")
 				assert.NotNil(t, res.Inner.Price)
 				assert.Equal(t, 19.99, *res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
@@ -575,9 +575,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 						Price *float64 `path:"price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price?")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price?")
 				assert.Nil(t, res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -587,9 +587,9 @@ func testPathParamOfTypeFloat(t *testing.T, frameworkName string, method string)
 						Price *float64 `path:"price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/product/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/product/:price?")
+				res, status, _ := doTest[Input](t, app, req,  "/product/:price?")
 				assert.Nil(t, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -605,9 +605,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					Active bool `path:"active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/true", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active")
 				assert.Equal(t, true, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -616,9 +616,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					Active bool `path:"active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/false", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -627,9 +627,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					Active bool `path:"active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/1", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active")
 				assert.Equal(t, true, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -638,9 +638,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					Active bool `path:"active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/0", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -649,9 +649,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					Active bool `path:"active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -664,9 +664,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/true", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active")
 				assert.Equal(t, true, res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -676,9 +676,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 						Active bool `path:"active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active")
 				assert.Equal(t, false, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -695,9 +695,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					Active *bool `path:"active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/true", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active?")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active?")
 				assert.NotNil(t, res.Active)
 				assert.Equal(t, true, *res.Active)
 				assert.Equal(t, http.StatusOK, status)
@@ -707,9 +707,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					Active *bool `path:"active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/false", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active?")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active?")
 				assert.NotNil(t, res.Active)
 				assert.Equal(t, false, *res.Active)
 				assert.Equal(t, http.StatusOK, status)
@@ -719,9 +719,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					Active *bool `path:"active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active?")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active?")
 				assert.Nil(t, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -730,9 +730,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					Active *bool `path:"active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active?")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active?")
 				assert.Nil(t, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -745,9 +745,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/true", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active?")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active?")
 				assert.NotNil(t, res.Inner.Active)
 				assert.Equal(t, true, *res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
@@ -758,9 +758,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 						Active *bool `path:"active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active?")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active?")
 				assert.Nil(t, res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -770,9 +770,9 @@ func testPathParamOfTypeBool(t *testing.T, frameworkName string, method string) 
 						Active *bool `path:"active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/status/invalid", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/status/:active?")
+				res, status, _ := doTest[Input](t, app, req,  "/status/:active?")
 				assert.Nil(t, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})

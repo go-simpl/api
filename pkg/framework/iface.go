@@ -8,15 +8,10 @@ import (
 )
 
 type Framework interface {
-	GET(path string, handler FrameworkHandler)
-	POST(path string, handler FrameworkHandler)
-	PUT(path string, handler FrameworkHandler)
-	PATCH(path string, handler FrameworkHandler)
-	DELETE(path string, handler FrameworkHandler)
-	OPTIONS(path string, handler FrameworkHandler)
-	HEAD(path string, handler FrameworkHandler)
-	TRACE(path string, handler FrameworkHandler)
+	Register(path string, method string, handler FrameworkHandler)
+
 	ListenAndServe(addr string) error
+	Shutdown() error
 
 	TestRequest(req *http.Request) (*http.Response, error)
 }

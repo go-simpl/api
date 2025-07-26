@@ -1,14 +1,18 @@
 package simplapi
 
 import (
+	"net/http"
+
 	"github.com/go-simpl/simplapi/pkg/framework"
 	"github.com/go-simpl/simplapi/pkg/handler"
-	"github.com/go-simpl/simplapi/pkg/swagger"
+	"github.com/go-simpl/simplapi/pkg/spec"
 )
 
 type App struct {
-	framework   framework.Framework
-	swaggerJson map[string]interface{}
+	framework framework.Framework
+	spec      *spec.Spec
+
+	endpoints []*Endpoint
 }
 
 func New(frameworkName ...string) *App {
@@ -16,16 +20,10 @@ func New(frameworkName ...string) *App {
 
 	s := &App{
 		framework: framework.GetFramework(frameworkName[0]),
-		swaggerJson: map[string]interface{}{
-			"openapi": "3.0.0",
-			"info": map[string]interface{}{
-				"title":   "SimpleAPI",
-				"version": "1.0.0",
-			},
-			"paths": map[string]interface{}{},
-		},
+		spec:      spec.New(),
+		endpoints: []*Endpoint{},
 	}
-	addSwaggerRoutes(s)
+	addOpenAPIRoutes(s)
 	return s
 }
 
@@ -33,8 +31,54 @@ func (s *App) GetApp() framework.Framework {
 	return s.framework
 }
 
+func (s *App) GET(path string, handlers ...interface{}) *Endpoint {
+	endpoint := newEndpoint(http.MethodGet, path, handlers...)
+	s.addEndpoint(endpoint)
+	return endpoint
+}
+
+func (s *App) POST(path string, handlers ...interface{}) *Endpoint {
+	endpoint := newEndpoint(http.MethodPost, path, handlers...)
+	s.addEndpoint(endpoint)
+	return endpoint
+}
+
+func (s *App) PUT(path string, handlers ...interface{}) *Endpoint {
+	endpoint := newEndpoint(http.MethodPut, path, handlers...)
+	s.addEndpoint(endpoint)
+	return endpoint
+}
+
+func (s *App) DELETE(path string, handlers ...interface{}) *Endpoint {
+	endpoint := newEndpoint(http.MethodDelete, path, handlers...)
+	s.addEndpoint(endpoint)
+	return endpoint
+}
+
+func (s *App) PATCH(path string, handlers ...interface{}) *Endpoint {
+	endpoint := newEndpoint(http.MethodPatch, path, handlers...)
+	s.addEndpoint(endpoint)
+	return endpoint
+}
+
+func (s *App) Sync() {
+	for _, e := range s.endpoints {
+		s.framework.Register(e.path, e.method, s.createHandler(e.handlers...))
+		if e.addToSpec {
+			s.spec.Register(e.path, e.method, e.handlers...)
+		}
+	}
+}
+
 func (s *App) ListenAndServe(addr string) error {
+	// Actual registration of endpoints happen here
+	s.Sync()
+
 	return s.framework.ListenAndServe(addr)
+}
+
+func (s *App) addEndpoint(endpoint *Endpoint) {
+	s.endpoints = append(s.endpoints, endpoint)
 }
 
 func (s *App) createHandler(handlers ...interface{}) framework.FrameworkHandler {
@@ -49,62 +93,4 @@ func (s *App) createHandler(handlers ...interface{}) framework.FrameworkHandler 
 	}
 
 	return nextHandler
-}
-
-func (s *App) GET(path string, tags []string, handlers ...interface{}) {
-	s.framework.GET(path, s.createHandler(handlers...))
-	s.addToSwagger(path, "get", handlers, tags)
-}
-
-func (s *App) POST(path string, tags []string, handlers ...interface{}) {
-	s.framework.POST(path, s.createHandler(handlers...))
-	s.addToSwagger(path, "post", handlers, tags)
-}
-
-func (s *App) PUT(path string, tags []string, handlers ...interface{}) {
-	s.framework.PUT(path, s.createHandler(handlers...))
-	s.addToSwagger(path, "put", handlers, tags)
-}
-
-func (s *App) PATCH(path string, tags []string, handlers ...interface{}) {
-	s.framework.PATCH(path, s.createHandler(handlers...))
-	s.addToSwagger(path, "patch", handlers, tags)
-}
-
-func (s *App) DELETE(path string, tags []string, handlers ...interface{}) {
-	s.framework.DELETE(path, s.createHandler(handlers...))
-	s.addToSwagger(path, "delete", handlers, tags)
-}
-
-func (s *App) addToSwagger(path string, method string, handlers []interface{}, tags []string) {
-	if path == "/try" || path == "/openapi.json" {
-		return
-	}
-
-	definition := map[string]interface{}{
-		"parameters": []interface{}{},
-		"responses":  map[string]interface{}{},
-		"tags":       tags,
-	}
-
-	if method != "get" {
-		definition["requestBody"] = map[string]interface{}{}
-	}
-
-	for _, handler := range handlers {
-		swagger.UpdateDefinitionUsingHandler(definition, handler)
-	}
-
-	if _, ok := s.swaggerJson["paths"].(map[string]interface{})[path]; !ok {
-		s.swaggerJson["paths"].(map[string]interface{})[path] = map[string]interface{}{}
-	}
-
-	if _, ok := s.swaggerJson["paths"].(map[string]interface{})[path].(map[string]interface{})[method]; !ok {
-		s.swaggerJson["paths"].(map[string]interface{})[path].(map[string]interface{})[method] = definition
-	}
-
-	responses := definition["responses"].(map[string]interface{})
-	for _, handler := range handlers {
-		swagger.UpdateResponseDefinitionUsingHandler(responses, handler)
-	}
 }

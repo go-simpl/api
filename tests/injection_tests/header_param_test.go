@@ -65,10 +65,10 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name string `header:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Name", "John")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "John", res.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -77,9 +77,9 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name string `header:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "", res.Name)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -88,10 +88,10 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name string `header:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Name", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "", res.Name)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -104,10 +104,10 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Name", "John")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "John", res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -117,9 +117,9 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 						Name string `header:"X-Name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "", res.Inner.Name)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -129,10 +129,10 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 						Name string `header:"X-Name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Name", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "", res.Inner.Name)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -145,10 +145,10 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name *string `header:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Name", "John")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Name)
 				assert.Equal(t, "John", *res.Name)
 				assert.Equal(t, http.StatusOK, status)
@@ -158,9 +158,9 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name *string `header:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -169,10 +169,10 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name *string `header:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Name", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -185,10 +185,10 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Name", "John")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Name)
 				assert.Equal(t, "John", *res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
@@ -199,9 +199,9 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 						Name *string `header:"X-Name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -211,10 +211,10 @@ func testHeaderParamOfTypeString(t *testing.T, frameworkName string, method stri
 						Name *string `header:"X-Name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Name", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -230,10 +230,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age int `header:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "25")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 25, res.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -242,9 +242,9 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age int `header:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -253,10 +253,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age int `header:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -265,10 +265,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age int `header:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -281,10 +281,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "25")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 25, res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -294,9 +294,9 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age int `header:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Inner.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -306,10 +306,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age int `header:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Inner.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -319,10 +319,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age int `header:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Inner.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -335,10 +335,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age *int `header:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "25")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Age)
 				assert.Equal(t, 25, *res.Age)
 				assert.Equal(t, http.StatusOK, status)
@@ -348,9 +348,9 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age *int `header:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -359,10 +359,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age *int `header:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -371,10 +371,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age *int `header:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -387,10 +387,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "25")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Age)
 				assert.Equal(t, 25, *res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
@@ -401,9 +401,9 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age *int `header:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -413,10 +413,10 @@ func testHeaderParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age *int `header:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Age", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -432,10 +432,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `header:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "10")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(10), res.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -444,9 +444,9 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `header:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -455,10 +455,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `header:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -467,10 +467,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `header:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -479,10 +479,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `header:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "-5")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -495,10 +495,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "10")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(10), res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -508,9 +508,9 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count uint `header:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -520,10 +520,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count uint `header:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -533,10 +533,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count uint `header:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -549,10 +549,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count *uint `header:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "10")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Count)
 				assert.Equal(t, uint(10), *res.Count)
 				assert.Equal(t, http.StatusOK, status)
@@ -562,9 +562,9 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count *uint `header:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -573,10 +573,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count *uint `header:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -585,10 +585,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count *uint `header:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -601,10 +601,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "10")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Count)
 				assert.Equal(t, uint(10), *res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
@@ -615,9 +615,9 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count *uint `header:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -627,10 +627,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count *uint `header:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -640,10 +640,10 @@ func testHeaderParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count *uint `header:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Count", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -659,10 +659,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price float64 `header:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "19.99")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 19.99, res.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -671,9 +671,9 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price float64 `header:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -682,10 +682,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price float64 `header:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -694,10 +694,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price float64 `header:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -710,10 +710,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "19.99")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 19.99, res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -723,9 +723,9 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price float64 `header:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -735,10 +735,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price float64 `header:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -748,10 +748,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price float64 `header:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -764,10 +764,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price *float64 `header:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "19.99")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Price)
 				assert.Equal(t, 19.99, *res.Price)
 				assert.Equal(t, http.StatusOK, status)
@@ -777,9 +777,9 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price *float64 `header:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -788,10 +788,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price *float64 `header:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -800,10 +800,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price *float64 `header:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -816,10 +816,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "19.99")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Price)
 				assert.Equal(t, 19.99, *res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
@@ -830,9 +830,9 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price *float64 `header:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -842,10 +842,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price *float64 `header:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -855,10 +855,10 @@ func testHeaderParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price *float64 `header:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Price", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -874,10 +874,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "true")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, true, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -886,10 +886,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "false")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -898,10 +898,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "1")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, true, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -910,10 +910,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "0")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -922,9 +922,9 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -933,10 +933,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -945,10 +945,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -961,10 +961,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "true")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, true, res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -974,9 +974,9 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active bool `header:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -986,10 +986,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active bool `header:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -999,10 +999,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active bool `header:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -1015,10 +1015,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "true")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Active)
 				assert.Equal(t, true, *res.Active)
 				assert.Equal(t, http.StatusOK, status)
@@ -1028,10 +1028,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "false")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Active)
 				assert.Equal(t, false, *res.Active)
 				assert.Equal(t, http.StatusOK, status)
@@ -1041,9 +1041,9 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -1052,10 +1052,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -1064,10 +1064,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `header:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -1080,10 +1080,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "true")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Active)
 				assert.Equal(t, true, *res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
@@ -1094,9 +1094,9 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active *bool `header:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -1106,10 +1106,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active *bool `header:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -1119,10 +1119,10 @@ func testHeaderParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active *bool `header:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.Header.Set("X-Active", "invalid")
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})

@@ -11,18 +11,24 @@ import (
 
 	simplapi "github.com/go-simpl/simplapi"
 	_ "github.com/go-simpl/simplapi/pkg/framework/fiberframework"
+	"github.com/go-simpl/simplapi/tests/utils"
 )
 
 func TestNoRoutes(t *testing.T) {
-	app := simplapi.New()
-	fApp := app.GetApp()
+	frameworks := utils.GetAllFrameworks()
+	for _, framework := range frameworks {
+		t.Run(framework, func(t *testing.T) {
+			app := simplapi.New(framework)
+			fApp := app.GetApp()
 
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
+			req := httptest.NewRequest(http.MethodGet, "/", nil)
 
-	resp, err := fApp.TestRequest(req)
-	assert.NoError(t, err)
+			resp, err := fApp.TestRequest(req)
+			assert.NoError(t, err)
 
-	assert.Equal(t, http.StatusNotFound, resp.StatusCode)
+			assert.Equal(t, http.StatusNotFound, resp.StatusCode)
+		})
+	}
 }
 
 type HelloResponse struct {
@@ -34,53 +40,65 @@ func (r *HelloResponse) GetStatusCode() int {
 }
 
 func TestGET(t *testing.T) {
-	app := simplapi.New()
-	fApp := app.GetApp()
+	frameworks := utils.GetAllFrameworks()
+	for _, framework := range frameworks {
+		t.Run(framework, func(t *testing.T) {
+			app := simplapi.New(framework)
+			fApp := app.GetApp()
 
-	app.GET("/", nil, func() (*HelloResponse, error) {
-		return &HelloResponse{
-			Message: "Hello, World!",
-		}, nil
-	})
+			app.GET("/", func() (*HelloResponse, error) {
+				return &HelloResponse{
+					Message: "Hello, World!",
+				}, nil
+			})
+			app.Sync()
 
-	req := httptest.NewRequest(http.MethodGet, "/", nil)
+			req := httptest.NewRequest(http.MethodGet, "/", nil)
 
-	resp, err := fApp.TestRequest(req)
-	assert.NoError(t, err)
+			resp, err := fApp.TestRequest(req)
+			assert.NoError(t, err)
 
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
-	assert.Equal(t, "application/json", resp.Header.Get("Content-Type"))
-	respBytes, err := io.ReadAll(resp.Body)
-	assert.NoError(t, err)
-	respString := string(respBytes)
-	assert.Equal(t, `{"message":"Hello, World!"}`, respString)
+			assert.Equal(t, http.StatusOK, resp.StatusCode)
+			assert.Contains(t, resp.Header.Get("Content-Type"), "application/json")
+			respBytes, err := io.ReadAll(resp.Body)
+			assert.NoError(t, err)
+			respString := string(respBytes)
+			assert.Equal(t, `{"message":"Hello, World!"}`, respString)
+		})
+	}
 }
 
 func TestListen(t *testing.T) {
-	app := simplapi.New()
+	frameworks := utils.GetAllFrameworks()
+	for _, framework := range frameworks {
+		t.Run(framework, func(t *testing.T) {
+			app := simplapi.New(framework)
 
-	app.GET("/", nil, func() (*HelloResponse, error) {
-		return &HelloResponse{
-			Message: "Hello, World!",
-		}, nil
-	})
+			app.GET("/", func() (*HelloResponse, error) {
+				return &HelloResponse{
+					Message: "Hello, World!",
+				}, nil
+			})
 
-	go func() {
-		app.ListenAndServe(":3000")
-	}()
+			go func() {
+				app.ListenAndServe(":3000")
+			}()
+			defer app.GetApp().Shutdown()
 
-	time.Sleep(1 * time.Second)
+			time.Sleep(1 * time.Second)
 
-	req, err := http.NewRequest(http.MethodGet, "http://localhost:3000/", nil)
-	assert.NoError(t, err)
-	resp, err := http.DefaultClient.Do(req)
+			req, err := http.NewRequest(http.MethodGet, "http://localhost:3000/", nil)
+			assert.NoError(t, err)
+			resp, err := http.DefaultClient.Do(req)
 
-	assert.NoError(t, err)
+			assert.NoError(t, err)
 
-	assert.Equal(t, http.StatusOK, resp.StatusCode)
-	assert.Equal(t, "application/json", resp.Header.Get("Content-Type"))
-	respBytes, err := io.ReadAll(resp.Body)
-	assert.NoError(t, err)
-	respString := string(respBytes)
-	assert.Equal(t, `{"message":"Hello, World!"}`, respString)
+			assert.Equal(t, http.StatusOK, resp.StatusCode)
+			assert.Contains(t, resp.Header.Get("Content-Type"), "application/json")
+			respBytes, err := io.ReadAll(resp.Body)
+			assert.NoError(t, err)
+			respString := string(respBytes)
+			assert.Equal(t, `{"message":"Hello, World!"}`, respString)
+		})
+	}
 }

@@ -3,7 +3,15 @@
 ## Features
 
 - [ ] Configurable Swagger Spec
+- [ ] Swagger features
+  - [ ] Info
+  - [ ] Servers
+  - [ ] Security Scheme
+  - [ ] Tags
+  - [ ] Endpoint: Summary, Description, OperationId
+
 - [ ] Swagger descriptions
+- [ ] Input / Output validation
 - [ ] Response Headers
 - [ ] Non-json responses
 - [ ] Middleware
@@ -13,8 +21,8 @@
 
 ## Framework support
 
-- [-] Gin - https://github.com/gin-gonic/gin - 83k
-- [-] Fiber - https://github.com/gofiber/fiber - 37k
+- [x] Gin - https://github.com/gin-gonic/gin - 83k
+- [x] Fiber - https://github.com/gofiber/fiber - 37k
 - [ ] Beego - https://github.com/beego/beego - 32k
 - [ ] Echo - https://github.com/labstack/echo - 31k
 - [ ] go-zero - https://github.com/zeromicro/go-zero - 31k

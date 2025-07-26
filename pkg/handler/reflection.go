@@ -1,4 +1,4 @@
-package reflection
+package handler
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"github.com/go-simpl/simplapi/pkg/framework"
 )
 
-func ComputeValuesFromRequest(f framework.FrameworkRequest, pType reflect.Type, pVal reflect.Value) error {
+func computeValuesFromRequest(f framework.FrameworkRequest, pType reflect.Type, pVal reflect.Value) error {
 	for i := 0; i < pVal.NumField(); i++ {
 		if pType.Field(i).Tag.Get("body") == "json" {
 			b := pVal.Field(i).Addr().Interface()
@@ -52,7 +52,7 @@ func ComputeValuesFromRequest(f framework.FrameworkRequest, pType reflect.Type, 
 			}
 
 		} else if pType.Field(i).Type.Kind() == reflect.Struct {
-			err := ComputeValuesFromRequest(f, pType.Field(i).Type, pVal.Field(i))
+			err := computeValuesFromRequest(f, pType.Field(i).Type, pVal.Field(i))
 			if err != nil {
 				return err
 			}

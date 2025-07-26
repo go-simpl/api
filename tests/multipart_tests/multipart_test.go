@@ -24,7 +24,7 @@ func TestFileUpload(t *testing.T) {
 		} `body:"multipart"`
 	}
 
-	app.POST("/upload", nil, func(input FileUploadInput) error {
+	app.POST("/upload", func(input FileUploadInput) error {
 		assert.Equal(t, "test.txt", input.Body.File.Filename)
 		f, err := input.Body.File.Open()
 		assert.NoError(t, err)
@@ -33,6 +33,7 @@ func TestFileUpload(t *testing.T) {
 		assert.Equal(t, "Hello, world!", string(fBytes))
 		return nil
 	})
+	app.Sync()
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)

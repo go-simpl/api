@@ -10,24 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type RouteRegistrationFunc func(path string, tags []string, handlers ...interface{})
-
-func SetupTest(frameworkName string, method string) (*simplapi.App, RouteRegistrationFunc) {
-	app := simplapi.New(frameworkName)
-	switch method {
-	case http.MethodGet:
-		return app, app.GET
-	case http.MethodPost:
-		return app, app.POST
-	case http.MethodPut:
-		return app, app.PUT
-	case http.MethodDelete:
-		return app, app.DELETE
-	case http.MethodPatch:
-		return app, app.PATCH
-	default:
-		panic("Invalid method")
-	}
+func SetupTest(frameworkName string, method string) *simplapi.App {
+	return simplapi.New(frameworkName)
 }
 
 type HelloResponse struct {
@@ -42,13 +26,30 @@ func shouldSkipOptionalPathParamTest(frameworkName string) bool {
 	return false
 }
 
-func doTest[T any](t *testing.T, app *simplapi.App, req *http.Request, routeRegistration RouteRegistrationFunc, pathPattern string) (T, int, string) {
+func doTest[T any](t *testing.T, app *simplapi.App, req *http.Request, pathPattern string) (T, int, string) {
 	var result T
 
-	routeRegistration(pathPattern, nil, func(input T) (*HelloResponse, error) {
+	var registerFunc func(path string, handlers ...interface{}) *simplapi.Endpoint = nil
+	switch req.Method {
+	case http.MethodGet:
+		registerFunc = app.GET
+	case http.MethodPost:
+		registerFunc = app.POST
+	case http.MethodPut:
+		registerFunc = app.PUT
+	case http.MethodDelete:
+		registerFunc = app.DELETE
+	case http.MethodPatch:
+		registerFunc = app.PATCH
+	default:
+		panic("unsupported method: " + req.Method)
+	}
+
+	registerFunc(pathPattern, func(input T) (*HelloResponse, error) {
 		result = input
 		return &HelloResponse{Message: "Hello"}, nil
 	})
+	app.Sync()
 
 	resp, err := app.GetApp().TestRequest(req)
 	assert.NoError(t, err)

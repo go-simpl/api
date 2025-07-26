@@ -18,9 +18,6 @@ func TestCookieParam(t *testing.T) {
 		http.MethodPut,
 		http.MethodDelete,
 		http.MethodPatch,
-		// http.MethodHead,
-		// http.MethodOptions,
-		// http.MethodTrace,
 	}
 
 	types := utils.GetSupportedTypes()
@@ -65,10 +62,10 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name string `cookie:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Name", Value: "John"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "John", res.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -77,9 +74,9 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name string `cookie:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "", res.Name)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -88,10 +85,10 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name string `cookie:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Name", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "", res.Name)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -104,10 +101,10 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Name", Value: "John"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "John", res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -117,9 +114,9 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 						Name string `cookie:"X-Name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "", res.Inner.Name)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -129,10 +126,10 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 						Name string `cookie:"X-Name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Name", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, "", res.Inner.Name)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -145,10 +142,10 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name *string `cookie:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Name", Value: "John"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Name)
 				assert.Equal(t, "John", *res.Name)
 				assert.Equal(t, http.StatusOK, status)
@@ -158,9 +155,9 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name *string `cookie:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -169,10 +166,10 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 					Name *string `cookie:"X-Name"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Name", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -185,10 +182,10 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Name", Value: "John"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Name)
 				assert.Equal(t, "John", *res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
@@ -199,9 +196,9 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 						Name *string `cookie:"X-Name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -211,10 +208,10 @@ func testCookieParamOfTypeString(t *testing.T, frameworkName string, method stri
 						Name *string `cookie:"X-Name"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Name", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Name)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -230,10 +227,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age int `cookie:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: "25"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 25, res.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -242,9 +239,9 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age int `cookie:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -253,10 +250,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age int `cookie:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -265,10 +262,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age int `cookie:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -281,10 +278,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: "25"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 25, res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -294,9 +291,9 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age int `cookie:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Inner.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -306,10 +303,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age int `cookie:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Inner.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -319,10 +316,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age int `cookie:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0, res.Inner.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -335,10 +332,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age *int `cookie:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: "25"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Age)
 				assert.Equal(t, 25, *res.Age)
 				assert.Equal(t, http.StatusOK, status)
@@ -348,9 +345,9 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age *int `cookie:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -359,10 +356,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age *int `cookie:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -371,10 +368,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					Age *int `cookie:"X-Age"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Age)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -387,10 +384,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: "25"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Age)
 				assert.Equal(t, 25, *res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
@@ -401,9 +398,9 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age *int `cookie:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -413,10 +410,10 @@ func testCookieParamOfTypeInt(t *testing.T, frameworkName string, method string)
 						Age *int `cookie:"X-Age"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Age", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Age)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -432,10 +429,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `cookie:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: "10"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(10), res.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -444,9 +441,9 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `cookie:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -455,10 +452,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `cookie:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -467,10 +464,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `cookie:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -479,10 +476,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count uint `cookie:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: "-5"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -495,10 +492,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: "10"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(10), res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -508,9 +505,9 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count uint `cookie:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -520,10 +517,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count uint `cookie:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -533,10 +530,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count uint `cookie:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, uint(0), res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -549,10 +546,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count *uint `cookie:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: "10"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Count)
 				assert.Equal(t, uint(10), *res.Count)
 				assert.Equal(t, http.StatusOK, status)
@@ -562,9 +559,9 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count *uint `cookie:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -573,10 +570,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count *uint `cookie:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -585,10 +582,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					Count *uint `cookie:"X-Count"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -601,10 +598,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: "10"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Count)
 				assert.Equal(t, uint(10), *res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
@@ -615,9 +612,9 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count *uint `cookie:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -627,10 +624,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count *uint `cookie:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Count)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -640,10 +637,10 @@ func testCookieParamOfTypeUint(t *testing.T, frameworkName string, method string
 						Count *uint `cookie:"X-Count"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Count", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Count)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -659,10 +656,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price float64 `cookie:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: "19.99"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 19.99, res.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -671,9 +668,9 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price float64 `cookie:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -682,10 +679,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price float64 `cookie:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -694,10 +691,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price float64 `cookie:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -710,10 +707,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: "19.99"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 19.99, res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -723,9 +720,9 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price float64 `cookie:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -735,10 +732,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price float64 `cookie:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -748,10 +745,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price float64 `cookie:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, 0.0, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -764,10 +761,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price *float64 `cookie:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: "19.99"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Price)
 				assert.Equal(t, 19.99, *res.Price)
 				assert.Equal(t, http.StatusOK, status)
@@ -777,9 +774,9 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price *float64 `cookie:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -788,10 +785,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price *float64 `cookie:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -800,10 +797,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					Price *float64 `cookie:"X-Price"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -816,10 +813,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: "19.99"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Price)
 				assert.Equal(t, 19.99, *res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
@@ -830,9 +827,9 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price *float64 `cookie:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -842,10 +839,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price *float64 `cookie:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Price)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -855,10 +852,10 @@ func testCookieParamOfTypeFloat(t *testing.T, frameworkName string, method strin
 						Price *float64 `cookie:"X-Price"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Price", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Price)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -874,10 +871,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "true"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, true, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -886,10 +883,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "false"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -898,10 +895,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "1"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, true, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -910,10 +907,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "0"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -922,9 +919,9 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -933,10 +930,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -945,10 +942,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -961,10 +958,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "true"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, true, res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -974,9 +971,9 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active bool `cookie:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -986,10 +983,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active bool `cookie:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -999,10 +996,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active bool `cookie:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Equal(t, false, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -1015,10 +1012,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "true"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Active)
 				assert.Equal(t, true, *res.Active)
 				assert.Equal(t, http.StatusOK, status)
@@ -1028,10 +1025,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "false"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Active)
 				assert.Equal(t, false, *res.Active)
 				assert.Equal(t, http.StatusOK, status)
@@ -1041,9 +1038,9 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -1052,10 +1049,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -1064,10 +1061,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					Active *bool `cookie:"X-Active"`
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})
@@ -1080,10 +1077,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 					}
 				}
 
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "true"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.NotNil(t, res.Inner.Active)
 				assert.Equal(t, true, *res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
@@ -1094,9 +1091,9 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active *bool `cookie:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -1106,10 +1103,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active *bool `cookie:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: ""})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Active)
 				assert.Equal(t, http.StatusOK, status)
 			})
@@ -1119,10 +1116,10 @@ func testCookieParamOfTypeBool(t *testing.T, frameworkName string, method string
 						Active *bool `cookie:"X-Active"`
 					}
 				}
-				app, routeRegistration := SetupTest(frameworkName, method)
+				app := SetupTest(frameworkName, method)
 				req := httptest.NewRequest(method, "/", nil)
 				req.AddCookie(&http.Cookie{Name: "X-Active", Value: "invalid"})
-				res, status, _ := doTest[Input](t, app, req, routeRegistration, "/")
+				res, status, _ := doTest[Input](t, app, req, "/")
 				assert.Nil(t, res.Inner.Active)
 				assert.Equal(t, http.StatusUnprocessableEntity, status)
 			})

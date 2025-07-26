@@ -5,7 +5,6 @@ import (
 
 	"github.com/go-simpl/simplapi/pkg/context"
 	"github.com/go-simpl/simplapi/pkg/framework"
-	"github.com/go-simpl/simplapi/pkg/reflection"
 )
 
 func constructParams(req framework.FrameworkRequest, ctx *context.Context, handlerInputTypes []reflect.Type) ([]reflect.Value, error) {
@@ -18,7 +17,7 @@ func constructParams(req framework.FrameworkRequest, ctx *context.Context, handl
 		}
 
 		inputs[i] = reflect.New(handlerInputTypes[i]).Elem()
-		err := reflection.ComputeValuesFromRequest(req, handlerInputTypes[i], inputs[i])
+		err := computeValuesFromRequest(req, handlerInputTypes[i], inputs[i])
 		if err != nil {
 			return nil, err
 		}

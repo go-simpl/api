@@ -35,7 +35,8 @@ func TestChainReturnedFromFirstFunc(t *testing.T) {
 		return &HelloResponse{Message: "func2"}, nil
 	}
 
-	app.GET("/", nil, func1, func2)
+	app.GET("/", func1, func2)
+	app.Sync()
 
 	req, err := http.NewRequest("GET", "/", nil)
 	assert.NoError(t, err)
@@ -63,7 +64,8 @@ func TestChainReturnedFromSecondFunc(t *testing.T) {
 		return &HelloResponse{Message: "func2"}, nil
 	}
 
-	app.GET("/", nil, func1, func2)
+	app.GET("/", func1, func2)
+	app.Sync()
 
 	req, err := http.NewRequest("GET", "/", nil)
 	assert.NoError(t, err)
@@ -91,7 +93,8 @@ func TestChainReturnedFromNoFunc(t *testing.T) {
 		return nil, nil
 	}
 
-	app.GET("/", nil, func1, func2)
+	app.GET("/", func1, func2)
+	app.Sync()
 
 	req, err := http.NewRequest("GET", "/", nil)
 	assert.NoError(t, err)
@@ -114,7 +117,8 @@ func TestChainReturnedErrorFromFirstFunc(t *testing.T) {
 		return nil, nil
 	}
 
-	app.GET("/", nil, func1, func2)
+	app.GET("/", func1, func2)
+	app.Sync()
 
 	req, err := http.NewRequest("GET", "/", nil)
 	assert.NoError(t, err)
@@ -150,7 +154,8 @@ func TestContextInChain(t *testing.T) {
 		return &HelloResponse{Message: ""}, nil
 	}
 
-	app.GET("/", nil, func1, func2, func3)
+	app.GET("/", func1, func2, func3)
+	app.Sync()
 
 	req := httptest.NewRequest("GET", "/", nil)
 	response, err := fApp.TestRequest(req)

@@ -7,16 +7,34 @@ import (
 	"github.com/go-simpl/simplapi/pkg/context"
 	"github.com/go-simpl/simplapi/pkg/framework"
 
+	goctx "context"
+
 	"github.com/gin-gonic/gin"
 )
 
 type ginFramework struct {
 	engine *gin.Engine
+	srv    *http.Server
 }
 
 func New(engine *gin.Engine) framework.Framework {
 	return &ginFramework{
-		engine: engine,
+		engine: gin.Default(),
+	}
+}
+
+func (g *ginFramework) Register(path string, method string, handler framework.FrameworkHandler) {
+	switch method {
+	case http.MethodGet:
+		g.GET(path, handler)
+	case http.MethodPost:
+		g.POST(path, handler)
+	case http.MethodPut:
+		g.PUT(path, handler)
+	case http.MethodPatch:
+		g.PATCH(path, handler)
+	case http.MethodDelete:
+		g.DELETE(path, handler)
 	}
 }
 
@@ -65,35 +83,19 @@ func (g *ginFramework) DELETE(path string, handler framework.FrameworkHandler) {
 	})
 }
 
-func (g *ginFramework) OPTIONS(path string, handler framework.FrameworkHandler) {
-	g.engine.OPTIONS(path, func(c *gin.Context) {
-		err := handler(NewRequest(c), NewResponse(c), context.New())
-		if err != nil {
-			c.AbortWithError(http.StatusInternalServerError, err)
-		}
-	})
-}
-
-func (g *ginFramework) HEAD(path string, handler framework.FrameworkHandler) {
-	g.engine.HEAD(path, func(c *gin.Context) {
-		err := handler(NewRequest(c), NewResponse(c), context.New())
-		if err != nil {
-			c.AbortWithError(http.StatusInternalServerError, err)
-		}
-	})
-}
-
-func (g *ginFramework) TRACE(path string, handler framework.FrameworkHandler) {
-	g.engine.Handle("TRACE", path, func(c *gin.Context) {
-		err := handler(NewRequest(c), NewResponse(c), context.New())
-		if err != nil {
-			c.AbortWithError(http.StatusInternalServerError, err)
-		}
-	})
-}
-
 func (g *ginFramework) ListenAndServe(addr string) error {
-	return g.engine.Run(addr)
+	g.srv = &http.Server{
+		Addr:    addr,
+		Handler: g.engine,
+	}
+	return g.srv.ListenAndServe()
+}
+
+func (g *ginFramework) Shutdown() error {
+	if g.srv == nil {
+		return nil
+	}
+	return g.srv.Shutdown(goctx.Background())
 }
 
 func (g *ginFramework) TestRequest(req *http.Request) (*http.Response, error) {
