@@ -13,6 +13,8 @@ type Framework interface {
 	ListenAndServe(addr string) error
 	Shutdown() error
 
+	GetNativeApp() interface{}
+
 	TestRequest(req *http.Request) (*http.Response, error)
 }
 

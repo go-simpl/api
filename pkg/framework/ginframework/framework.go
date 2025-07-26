@@ -23,6 +23,10 @@ func New(engine *gin.Engine) framework.Framework {
 	}
 }
 
+func (g *ginFramework) GetNativeApp() interface{} {
+	return g.engine
+}
+
 func (g *ginFramework) Register(path string, method string, handler framework.FrameworkHandler) {
 	switch method {
 	case http.MethodGet:

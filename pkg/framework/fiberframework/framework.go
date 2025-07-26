@@ -21,6 +21,10 @@ func New(app *fiber.App) framework.Framework {
 	}
 }
 
+func (f *fiberFramework) GetNativeApp() interface{} {
+	return f.app
+}
+
 func (f *fiberFramework) Register(path string, method string, handler framework.FrameworkHandler) {
 	switch method {
 	case http.MethodGet:
