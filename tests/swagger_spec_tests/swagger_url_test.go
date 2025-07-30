@@ -15,7 +15,7 @@ import (
 func TestOpenAPIJsonURL(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
-		app := simplapi.New(framework)
+		app := simplapi.New(framework, "")
 		app.Sync()
 		fApp := app.GetApp()
 
@@ -31,7 +31,7 @@ func TestOpenAPIJsonURL(t *testing.T) {
 func TestTryURL(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
-		app := simplapi.New(framework)
+		app := simplapi.New(framework, "")
 		app.Sync()
 		fApp := app.GetApp()
 		{

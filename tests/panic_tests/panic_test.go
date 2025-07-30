@@ -24,7 +24,7 @@ func TestNonFuncHandler(t *testing.T) {
 		assert.NotNil(t, r)
 		assert.Equal(t, "handler must be a function", r)
 	}()
-	app := simplapi.New()
+	app := simplapi.New("fiber", "")
 	app.GET("/", "hello")
 	app.Sync()
 }
@@ -35,7 +35,7 @@ func TestNoOutputHandler(t *testing.T) {
 		assert.NotNil(t, r)
 		assert.Equal(t, "handler must return an error at the least", r)
 	}()
-	app := simplapi.New()
+	app := simplapi.New("fiber", "")
 	app.GET("/", func() {})
 	app.Sync()
 }
@@ -46,7 +46,7 @@ func TestHandlerThatDoesnReturnError(t *testing.T) {
 		assert.NotNil(t, r)
 		assert.Equal(t, "handler must return an error at the last position", r)
 	}()
-	app := simplapi.New()
+	app := simplapi.New("fiber", "")
 	app.GET("/", func() *HelloResponse {
 		return nil
 	})
@@ -59,7 +59,7 @@ func TestHandlerResponseMustBePointer(t *testing.T) {
 		assert.NotNil(t, r)
 		assert.Equal(t, "response type must be a pointer", r)
 	}()
-	app := simplapi.New()
+	app := simplapi.New("fiber", "")
 	app.GET("/", func() (HelloResponse, error) {
 		return HelloResponse{}, nil
 	})

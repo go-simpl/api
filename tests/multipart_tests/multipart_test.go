@@ -12,43 +12,49 @@ import (
 
 	simplapi "github.com/go-simpl/simplapi"
 	_ "github.com/go-simpl/simplapi/pkg/framework/fiberframework"
+	"github.com/go-simpl/simplapi/tests/utils"
 )
 
 func TestFileUpload(t *testing.T) {
-	app := simplapi.New()
-	fApp := app.GetApp()
+	frameworks := utils.GetAllFrameworks()
+	for _, framework := range frameworks {
+		t.Run(framework, func(t *testing.T) {
+			app := simplapi.New(framework, "")
+			fApp := app.GetApp()
 
-	type FileUploadInput struct {
-		Body struct {
-			File *multipart.FileHeader `form:"file"`
-		} `body:"multipart"`
+			type FileUploadInput struct {
+				Body struct {
+					File *multipart.FileHeader `form:"file"`
+				} `body:"multipart"`
+			}
+
+			app.POST("/upload", func(input FileUploadInput) error {
+				assert.Equal(t, "test.txt", input.Body.File.Filename)
+				f, err := input.Body.File.Open()
+				assert.NoError(t, err)
+				fBytes, err := io.ReadAll(f)
+				assert.NoError(t, err)
+				assert.Equal(t, "Hello, world!", string(fBytes))
+				return nil
+			})
+			app.Sync()
+
+			body := &bytes.Buffer{}
+			writer := multipart.NewWriter(body)
+			file, err := writer.CreateFormFile("file", "test.txt")
+			assert.NoError(t, err)
+			_, err = file.Write([]byte("Hello, world!"))
+			assert.NoError(t, err)
+			writer.Close()
+
+			req := httptest.NewRequest("POST", "/upload", body)
+			assert.NoError(t, err)
+			req.Header.Set("Content-Type", writer.FormDataContentType())
+
+			response, err := fApp.TestRequest(req)
+			assert.NoError(t, err)
+
+			assert.Equal(t, http.StatusOK, response.StatusCode)
+		})
 	}
-
-	app.POST("/upload", func(input FileUploadInput) error {
-		assert.Equal(t, "test.txt", input.Body.File.Filename)
-		f, err := input.Body.File.Open()
-		assert.NoError(t, err)
-		fBytes, err := io.ReadAll(f)
-		assert.NoError(t, err)
-		assert.Equal(t, "Hello, world!", string(fBytes))
-		return nil
-	})
-	app.Sync()
-
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
-	file, err := writer.CreateFormFile("file", "test.txt")
-	assert.NoError(t, err)
-	_, err = file.Write([]byte("Hello, world!"))
-	assert.NoError(t, err)
-	writer.Close()
-
-	req := httptest.NewRequest("POST", "/upload", body)
-	assert.NoError(t, err)
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-
-	response, err := fApp.TestRequest(req)
-	assert.NoError(t, err)
-
-	assert.Equal(t, http.StatusOK, response.StatusCode)
 }

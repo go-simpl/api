@@ -15,12 +15,11 @@ type App struct {
 	endpoints []*Endpoint
 }
 
-func New(frameworkName ...string) *App {
-	frameworkName = append(frameworkName, "fiber")
+func New(frameworkName, basePkgName string) *App {
 
 	s := &App{
-		framework: framework.GetFramework(frameworkName[0]),
-		spec:      spec.New(),
+		framework: framework.GetFramework(frameworkName),
+		spec:      spec.New(basePkgName),
 		endpoints: []*Endpoint{},
 	}
 	addOpenAPIRoutes(s)
@@ -65,9 +64,10 @@ func (s *App) Sync() {
 	for _, e := range s.endpoints {
 		s.framework.Register(e.path, e.method, s.createHandler(e.handlers...))
 		if e.addToSpec {
-			s.spec.Register(s.framework.GetOpenAPICompatiblePathPattern(e.path), e.method, e.tags, e.handlers...)
+			s.spec.Register(s.framework.GetOpenAPICompatiblePathPattern(e.path), e.method, e.tags, e.operationId, e.summary, e.description, e.handlers...)
 		}
 	}
+	s.spec.Write("openapi.gen.json")
 }
 
 func (s *App) ListenAndServe(addr string) error {

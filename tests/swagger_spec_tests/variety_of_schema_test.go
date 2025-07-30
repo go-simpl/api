@@ -75,7 +75,7 @@ func (r *Response3) GetStatusCode() int {
 func TestAllPossibleSchemaStuff(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
-		app := simplapi.New(framework)
+		app := simplapi.New(framework, "")
 
 		app.POST("/json", func(input JsonInput) (*Response1, *Response2, *Response3, error) {
 			return nil, nil, nil, nil

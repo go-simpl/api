@@ -1,7 +1,9 @@
 package spec
 
 import (
+	"encoding/json"
 	"net/http"
+	"os"
 	"reflect"
 	"strings"
 
@@ -14,7 +16,7 @@ type Spec struct {
 	gen  *openapi3gen.Generator
 }
 
-func New() *Spec {
+func New(basePkgName string) *Spec {
 	return &Spec{
 		spec: &openapi3.T{
 			OpenAPI: "3.1.0",
@@ -69,7 +71,7 @@ func New() *Spec {
 
 				name = t.PkgPath() + "_" + name
 
-				name = strings.ReplaceAll(name, "github.com/go-simpl/simplapi/example/", "")
+				name = strings.ReplaceAll(name, basePkgName, "")
 				name = strings.ReplaceAll(name, "/", "_")
 
 				return name
@@ -82,7 +84,7 @@ func (s *Spec) ToJson() any {
 	return s.spec
 }
 
-func (s *Spec) Register(path string, method string, tags []string, handlers ...interface{}) {
+func (s *Spec) Register(path string, method string, tags []string, operationId, summary, description string, handlers ...interface{}) {
 	if s.spec.Paths.Find(path) == nil {
 		s.spec.Paths.Set(path, &openapi3.PathItem{})
 	}
@@ -92,6 +94,10 @@ func (s *Spec) Register(path string, method string, tags []string, handlers ...i
 	if tags != nil {
 		op.Tags = tags
 	}
+
+	op.OperationID = operationId
+	op.Summary = summary
+	op.Description = description
 
 	for _, h := range handlers {
 		addRequestInfo(s.gen, s.spec.Components.Schemas, op, h)
@@ -113,4 +119,12 @@ func (s *Spec) Register(path string, method string, tags []string, handlers ...i
 	case http.MethodPatch:
 		s.spec.Paths.Value(path).Patch = op
 	}
+}
+
+func (s *Spec) Write(path string) error {
+	json, err := json.MarshalIndent(s.spec, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, json, 0644)
 }
