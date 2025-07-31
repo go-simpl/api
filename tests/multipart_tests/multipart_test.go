@@ -19,7 +19,7 @@ func TestFileUpload(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
 		t.Run(framework, func(t *testing.T) {
-			app := simplapi.New(framework, "")
+			app := simplapi.New(simplapi.WithCreateFramework(framework))
 			fApp := app.GetApp()
 
 			type FileUploadInput struct {

@@ -11,7 +11,7 @@ import (
 )
 
 func SetupTest(frameworkName string, method string) *simplapi.App {
-	return simplapi.New(frameworkName, "")
+	return simplapi.New(simplapi.WithCreateFramework(frameworkName))
 }
 
 type HelloResponse struct {

@@ -15,14 +15,45 @@ type App struct {
 	endpoints []*Endpoint
 }
 
-func New(frameworkName, basePkgName string) *App {
+type AppConfig struct {
+	framework framework.Framework
+	spec      *spec.Spec
+}
+
+type AppOption func(*AppConfig)
+
+func WithCreateFramework(frameworkName string) AppOption {
+	return func(c *AppConfig) {
+		c.framework = framework.GetFramework(frameworkName)
+	}
+}
+
+func WithFramework(framework framework.Framework) AppOption {
+	return func(c *AppConfig) {
+		c.framework = framework
+	}
+}
+
+func WithAutoOpenAPISpec(basePkgName string) AppOption {
+	return func(c *AppConfig) {
+		c.spec = spec.New(basePkgName)
+	}
+}
+
+func New(opts ...AppOption) *App {
+	config := &AppConfig{}
+	for _, opt := range opts {
+		opt(config)
+	}
 
 	s := &App{
-		framework: framework.GetFramework(frameworkName),
-		spec:      spec.New(basePkgName),
+		framework: config.framework,
+		spec:      config.spec,
 		endpoints: []*Endpoint{},
 	}
-	addOpenAPIRoutes(s)
+	if s.spec != nil {
+		addOpenAPIRoutes(s)
+	}
 	return s
 }
 
@@ -63,11 +94,10 @@ func (s *App) PATCH(path string, handlers ...interface{}) *Endpoint {
 func (s *App) Sync() {
 	for _, e := range s.endpoints {
 		s.framework.Register(e.path, e.method, s.createHandler(e.handlers...))
-		if e.addToSpec {
+		if e.addToSpec && s.spec != nil {
 			s.spec.Register(s.framework.GetOpenAPICompatiblePathPattern(e.path), e.method, e.tags, e.operationId, e.summary, e.description, e.handlers...)
 		}
 	}
-	s.spec.Write("openapi.gen.json")
 }
 
 func (s *App) ListenAndServe(addr string) error {

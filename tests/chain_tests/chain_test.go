@@ -28,7 +28,7 @@ func TestChainReturnedFromFirstFunc(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
 		t.Run(framework, func(t *testing.T) {
-			app := simplapi.New(framework, "")
+			app := simplapi.New(simplapi.WithCreateFramework(framework))
 			fApp := app.GetApp()
 
 			func1 := func() (*HelloResponse, error) {
@@ -62,7 +62,7 @@ func TestChainReturnedFromSecondFunc(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
 		t.Run(framework, func(t *testing.T) {
-			app := simplapi.New(framework, "")
+			app := simplapi.New(simplapi.WithCreateFramework(framework))
 			fApp := app.GetApp()
 
 			func1 := func() (*HelloResponse, error) {
@@ -96,7 +96,7 @@ func TestChainReturnedFromNoFunc(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
 		t.Run(framework, func(t *testing.T) {
-			app := simplapi.New(framework, "")
+			app := simplapi.New(simplapi.WithCreateFramework(framework))
 			fApp := app.GetApp()
 
 			func1 := func() (*HelloResponse, error) {
@@ -125,7 +125,7 @@ func TestChainReturnedErrorFromFirstFunc(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
 		t.Run(framework, func(t *testing.T) {
-			app := simplapi.New(framework, "")
+			app := simplapi.New(simplapi.WithCreateFramework(framework))
 			fApp := app.GetApp()
 
 			func1 := func() (*HelloResponse, error) {
@@ -155,7 +155,7 @@ func TestContextInChain(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
 		t.Run(framework, func(t *testing.T) {
-			app := simplapi.New(framework, "")
+			app := simplapi.New(simplapi.WithCreateFramework(framework))
 			fApp := app.GetApp()
 
 			func1 := func(ctx *context.Context) (*HelloResponse, error) {

@@ -18,7 +18,7 @@ func TestNoRoutes(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
 		t.Run(framework, func(t *testing.T) {
-			app := simplapi.New(framework, "")
+			app := simplapi.New(simplapi.WithCreateFramework(framework))
 			fApp := app.GetApp()
 
 			req := httptest.NewRequest(http.MethodGet, "/", nil)
@@ -43,7 +43,7 @@ func TestGET(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
 		t.Run(framework, func(t *testing.T) {
-			app := simplapi.New(framework, "")
+			app := simplapi.New(simplapi.WithCreateFramework(framework))
 			fApp := app.GetApp()
 
 			app.GET("/", func() (*HelloResponse, error) {
@@ -72,7 +72,7 @@ func TestListen(t *testing.T) {
 	frameworks := utils.GetAllFrameworks()
 	for _, framework := range frameworks {
 		t.Run(framework, func(t *testing.T) {
-			app := simplapi.New(framework, "")
+			app := simplapi.New(simplapi.WithCreateFramework(framework))
 
 			app.GET("/", func() (*HelloResponse, error) {
 				return &HelloResponse{

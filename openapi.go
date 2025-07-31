@@ -82,6 +82,7 @@ const redocUI = `<!DOCTYPE html>
 </html>`
 
 func addOpenAPIRoutes(app *App) {
+	// TODO make the routes configurable
 	app.GET("/_try/swagger", func() (*types.HTMLResponse, error) {
 		return &types.HTMLResponse{
 			HTML: swaggerUI,

@@ -1,9 +1,7 @@
 package spec
 
 import (
-	"encoding/json"
 	"net/http"
-	"os"
 	"reflect"
 	"strings"
 
@@ -119,12 +117,4 @@ func (s *Spec) Register(path string, method string, tags []string, operationId, 
 	case http.MethodPatch:
 		s.spec.Paths.Value(path).Patch = op
 	}
-}
-
-func (s *Spec) Write(path string) error {
-	json, err := json.MarshalIndent(s.spec, "", "  ")
-	if err != nil {
-		return err
-	}
-	return os.WriteFile(path, json, 0644)
 }
