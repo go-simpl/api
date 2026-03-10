@@ -9,6 +9,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
+// getSchemaForType maps Go types to OpenAPI schemas. multipart.FileHeader becomes type "file"; primitives map to integer/string/etc.; others fall back to string.
 func getSchemaForType(t reflect.Type) *openapi3.Schema {
 	if t == reflect.TypeOf((*multipart.FileHeader)(nil)) {
 		schema := openapi3.NewSchema()
@@ -39,6 +40,7 @@ func getSchemaForType(t reflect.Type) *openapi3.Schema {
 var schemaNameCount int = 0
 var schemaNameMutex sync.Mutex
 
+// generateSchemaName returns a unique name for anonymous/unnamed types in the spec; mutex ensures uniqueness.
 func generateSchemaName() string {
 	schemaNameMutex.Lock()
 	defer schemaNameMutex.Unlock()

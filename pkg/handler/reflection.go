@@ -1,5 +1,7 @@
 package handler
 
+// This file binds request data to handler input structs using struct tags: body (json/urlencoded/multipart), path, query, header, cookie.
+
 import (
 	"fmt"
 	"mime/multipart"
@@ -10,6 +12,7 @@ import (
 	"github.com/go-simpl/simplapi/pkg/framework"
 )
 
+// computeValuesFromRequest fills pVal from the request. Tag precedence: body first, then nested struct, then path/query/header/cookie.
 func computeValuesFromRequest(f framework.FrameworkRequest, pType reflect.Type, pVal reflect.Value) error {
 	for i := 0; i < pVal.NumField(); i++ {
 		if pType.Field(i).Tag.Get("body") == "json" {
@@ -64,6 +67,7 @@ func computeValuesFromRequest(f framework.FrameworkRequest, pType reflect.Type, 
 			}
 
 		} else if pType.Field(i).Tag.Get("query") != "" {
+			// Optional (ptr) param: empty string leaves field as zero value.
 			if pVal.Field(i).Type().Kind() != reflect.Ptr || f.GetQueryParam(pType.Field(i).Tag.Get("query")) != "" {
 				err := setValue(pVal.Field(i), f.GetQueryParam(pType.Field(i).Tag.Get("query")), pType.Field(i).Name)
 				if err != nil {
@@ -72,6 +76,7 @@ func computeValuesFromRequest(f framework.FrameworkRequest, pType reflect.Type, 
 			}
 
 		} else if pType.Field(i).Tag.Get("header") != "" {
+			// Optional (ptr) param: empty string leaves field as zero value.
 			if pVal.Field(i).Type().Kind() != reflect.Ptr || f.GetHeader(pType.Field(i).Tag.Get("header")) != "" {
 				err := setValue(pVal.Field(i), f.GetHeader(pType.Field(i).Tag.Get("header")), pType.Field(i).Name)
 				if err != nil {
@@ -79,6 +84,7 @@ func computeValuesFromRequest(f framework.FrameworkRequest, pType reflect.Type, 
 				}
 			}
 		} else if pType.Field(i).Tag.Get("cookie") != "" {
+			// Optional (ptr) param: empty string leaves field as zero value.
 			if pVal.Field(i).Type().Kind() != reflect.Ptr || f.GetCookieValue(pType.Field(i).Tag.Get("cookie")) != "" {
 				err := setValue(pVal.Field(i), f.GetCookieValue(pType.Field(i).Tag.Get("cookie")), pType.Field(i).Name)
 				if err != nil {
@@ -91,6 +97,7 @@ func computeValuesFromRequest(f framework.FrameworkRequest, pType reflect.Type, 
 	return nil
 }
 
+// setValue sets valueObj from the string value. Ptr type means optional: missing or empty string leaves nil/zero.
 func setValue(valueObj reflect.Value, value string, fieldName string) error {
 	required := true
 
@@ -113,7 +120,6 @@ func setValue(valueObj reflect.Value, value string, fieldName string) error {
 
 	switch valueObj.Kind() {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		// Parse value as integer
 		intValue, err := strconv.ParseInt(value, 10, valueObj.Type().Bits())
 		if err != nil {
 			return errors.TypeError{
@@ -124,7 +130,6 @@ func setValue(valueObj reflect.Value, value string, fieldName string) error {
 		valueObj.SetInt(intValue)
 
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		// Parse value as unsigned integer
 		uintValue, err := strconv.ParseUint(value, 10, valueObj.Type().Bits())
 		if err != nil {
 			return errors.TypeError{
@@ -135,7 +140,6 @@ func setValue(valueObj reflect.Value, value string, fieldName string) error {
 		valueObj.SetUint(uintValue)
 
 	case reflect.Float32, reflect.Float64:
-		// Parse value as float
 		floatValue, err := strconv.ParseFloat(value, valueObj.Type().Bits())
 		if err != nil {
 			return errors.TypeError{
@@ -146,7 +150,6 @@ func setValue(valueObj reflect.Value, value string, fieldName string) error {
 		valueObj.SetFloat(floatValue)
 
 	case reflect.Bool:
-		// Parse value as boolean
 		boolValue, err := strconv.ParseBool(value)
 		if err != nil {
 			return errors.TypeError{
@@ -157,7 +160,6 @@ func setValue(valueObj reflect.Value, value string, fieldName string) error {
 		valueObj.SetBool(boolValue)
 
 	case reflect.String:
-		// Set value as string
 		valueObj.SetString(value)
 
 	default:

@@ -9,21 +9,20 @@ import (
 	"github.com/go-simpl/simplapi/pkg/framework"
 )
 
+// WrapHandler wraps a user handler (function) into a FrameworkHandler. The handler's last return must be error;
+// the first non-nil return value is sent as the response. If no response is sent, next is called.
 func WrapHandler(handler interface{}, next framework.FrameworkHandler) framework.FrameworkHandler {
-	// First we check if the handler is a function
 	handlerType := reflect.TypeOf(handler)
 	if handlerType.Kind() != reflect.Func {
 		panic("handler must be a function")
 	}
 
-	// Parse the function outputs
 	numOutputs := handlerType.NumOut()
 
 	if numOutputs == 0 {
 		panic("handler must return an error at the least")
 	}
 
-	// Last output should be an error
 	if handlerType.Out(numOutputs-1).Name() != "error" {
 		panic("handler must return an error at the last position")
 	}
@@ -44,13 +43,11 @@ func WrapHandler(handler interface{}, next framework.FrameworkHandler) framework
 		}
 		results := reflect.ValueOf(handler).Call(inputs)
 
-		// handle error
 		errVal := results[len(results)-1]
 		if !errVal.IsNil() {
 			return errVal.Interface().(error)
 		}
 
-		// handle response
 		for _, result := range results {
 			if !result.IsNil() {
 				bodyDone, err := transferToResponse(res, result)

@@ -7,6 +7,7 @@ import (
 	"github.com/go-simpl/simplapi/pkg/framework"
 )
 
+// constructParams builds the slice of reflect.Values for handler args: context.Context is passed through; other types are structs filled via computeValuesFromRequest.
 func constructParams(req framework.FrameworkRequest, ctx *context.Context, handlerInputTypes []reflect.Type) ([]reflect.Value, error) {
 	numInputs := len(handlerInputTypes)
 	inputs := make([]reflect.Value, numInputs)

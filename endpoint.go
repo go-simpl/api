@@ -1,5 +1,7 @@
 package simplapi
 
+// Endpoint is the fluent builder for a single route. Use WithTag, WithSummary, etc.,
+// or WithoutSpec to omit it from the OpenAPI spec.
 type Endpoint struct {
 	method      string
 	path        string
@@ -40,6 +42,7 @@ func (e *Endpoint) WithOperationId(operationId string) *Endpoint {
 	return e
 }
 
+// WithoutSpec marks this route so it is not added to the OpenAPI spec (e.g. for internal doc routes).
 func (e *Endpoint) WithoutSpec() *Endpoint {
 	e.addToSpec = false
 	return e

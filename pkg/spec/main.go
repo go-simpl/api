@@ -1,3 +1,5 @@
+// Package spec builds an OpenAPI 3.1 spec from registered endpoints and handler signatures.
+// Use New(basePkgName) to create a Spec; Register adds operations; ToJson returns the document.
 package spec
 
 import (
@@ -9,11 +11,13 @@ import (
 	"github.com/getkin/kin-openapi/openapi3gen"
 )
 
+// Spec holds the OpenAPI document and the generator used to derive schemas from Go types.
 type Spec struct {
 	spec *openapi3.T
 	gen  *openapi3gen.Generator
 }
 
+// New creates a Spec. basePkgName is stripped from type paths when generating schema names.
 func New(basePkgName string) *Spec {
 	return &Spec{
 		spec: &openapi3.T{
@@ -30,6 +34,7 @@ func New(basePkgName string) *Spec {
 			Paths: openapi3.NewPaths(),
 		},
 		gen: openapi3gen.NewGenerator(
+			// Mark non-pointer struct fields as required; apply example tag to schema.
 			openapi3gen.SchemaCustomizer(func(name string, t reflect.Type, tag reflect.StructTag, schema *openapi3.Schema) error {
 				if t.Kind() == reflect.Struct {
 					for i := 0; i < t.NumField(); i++ {
@@ -59,6 +64,7 @@ func New(basePkgName string) *Spec {
 					ExportGenerics:         true,
 				},
 			),
+			// Produce stable schema IDs from pkg path + type name; strip basePkgName for shorter names.
 			openapi3gen.CreateTypeNameGenerator(func(t reflect.Type) string {
 				var name string = ""
 				if t.Name() == "" {
@@ -82,6 +88,7 @@ func (s *Spec) ToJson() any {
 	return s.spec
 }
 
+// Register adds an operation for the given path and method, deriving request/response from handler types.
 func (s *Spec) Register(path string, method string, tags []string, operationId, summary, description string, handlers ...interface{}) {
 	if s.spec.Paths.Find(path) == nil {
 		s.spec.Paths.Set(path, &openapi3.PathItem{})

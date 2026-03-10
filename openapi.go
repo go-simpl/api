@@ -81,6 +81,8 @@ const redocUI = `<!DOCTYPE html>
   </body>
 </html>`
 
+// addOpenAPIRoutes registers built-in doc routes when WithAutoOpenAPISpec is used:
+// /_try/swagger, /_try/stoplight, /_try/redoc, and /openapi.json. These are internal and not in the main API spec.
 func addOpenAPIRoutes(app *App) {
 	// TODO make the routes configurable
 	app.GET("/_try/swagger", func() (*types.HTMLResponse, error) {

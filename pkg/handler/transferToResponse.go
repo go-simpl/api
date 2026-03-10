@@ -8,6 +8,7 @@ import (
 	"github.com/go-simpl/simplapi/types"
 )
 
+// hasResponseTags is reserved for future response tagging; currently always false.
 func hasResponseTags(t reflect.Type) bool {
 	return false
 }
@@ -17,7 +18,7 @@ func transferToResponse(res framework.FrameworkResponse, result reflect.Value) (
 		return false, nil
 	}
 
-	// check for custom response types
+	// First matching type wins: HTMLResponse (text/html), then APIResponse (status + JSON), else raw JSON.
 	if response, ok := result.Interface().(*types.HTMLResponse); ok {
 		res.SetStatusCode(http.StatusOK)
 		res.SetHeader("Content-Type", "text/html")

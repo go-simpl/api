@@ -27,6 +27,7 @@ func (g *ginFramework) GetNativeApp() interface{} {
 	return g.engine
 }
 
+// GetOpenAPICompatiblePathPattern returns path unchanged for the OpenAPI spec.
 func (g *ginFramework) GetOpenAPICompatiblePathPattern(path string) string {
 	return path
 }

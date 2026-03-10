@@ -26,6 +26,7 @@ func (f *fiberFramework) GetNativeApp() interface{} {
 	return f.app
 }
 
+// GetOpenAPICompatiblePathPattern converts Fiber's :param syntax to OpenAPI's {param} for the spec.
 func (f *fiberFramework) GetOpenAPICompatiblePathPattern(path string) string {
 	pathParts := strings.Split(path, "/")
 	for i, part := range pathParts {

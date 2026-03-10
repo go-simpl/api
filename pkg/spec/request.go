@@ -8,6 +8,7 @@ import (
 	"github.com/go-simpl/simplapi/pkg/context"
 )
 
+// addRequestInfo inspects handler input types and struct tags to add OpenAPI parameters and request body to op.
 func addRequestInfo(gen *openapi3gen.Generator, schemas openapi3.Schemas, op *openapi3.Operation, handler interface{}) {
 	handlerType := reflect.TypeOf(handler)
 	numInputs := handlerType.NumIn()
@@ -20,6 +21,7 @@ func addRequestInfo(gen *openapi3gen.Generator, schemas openapi3.Schemas, op *op
 	}
 }
 
+// addRequestInfoForParamType adds request info for one param type. context.Context is skipped; body/query/header/cookie/path are mapped to the operation.
 func addRequestInfoForParamType(gen *openapi3gen.Generator, schemas openapi3.Schemas, op *openapi3.Operation, paramType reflect.Type, paramName string) {
 	if paramType == reflect.TypeOf((*context.Context)(nil)) {
 		return
